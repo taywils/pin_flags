@@ -2,5 +2,11 @@ require "pin_flags/version"
 require "pin_flags/engine"
 
 module PinFlags
-  # Your code goes here...
+  mattr_accessor :cache_prefix, default: "pin_flags"
+  mattr_accessor :cache_expiry, default: 12.hours
+
+  def self.config
+    yield self if block_given?
+    self
+  end
 end
