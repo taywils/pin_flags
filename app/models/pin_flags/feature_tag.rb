@@ -67,12 +67,7 @@ module PinFlags
     end
 
     def self.export_as_json
-      feature_tags = all
-      Jbuilder.new do |json|
-        json.array! feature_tags do |feature_tag|
-          json.extract! feature_tag, :name, :enabled
-        end
-      end.target!
+      all.as_json(only: [ :name, :enabled ]).to_json
     end
 
     def self.import_from_json(json)

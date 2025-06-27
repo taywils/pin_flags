@@ -1,0 +1,4 @@
+[
+  { "invalid_key": "wrong", "strange_attribute": null },
+  { "wrong_invalid_key": "blah", "invalid_attribute": -1 }
+]
