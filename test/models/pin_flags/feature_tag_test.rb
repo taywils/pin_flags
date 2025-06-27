@@ -12,8 +12,7 @@ module PinFlags
     end
 
     test "ensures name uniqueness after normalization" do
-      FeatureTag.create!(name: "Foo Bar", enabled: true)
-      feature_tag = FeatureTag.new(name: "  Foo Bar  ", enabled: true)
+      feature_tag = FeatureTag.new(name: "  Live Feature  ", enabled: true)
       assert_not feature_tag.valid?
     end
 
@@ -30,15 +29,11 @@ module PinFlags
 
     # Scopes
     test "enabled scope returns only enabled feature tags" do
-      enabled_tag = FeatureTag.create!(name: "enabled_test", enabled: true)
-      FeatureTag.create!(name: "disabled_test", enabled: false)
-      assert_equal [ enabled_tag, pin_flags_feature_tags(:live_feature) ].sort, FeatureTag.enabled.to_a.sort
+      assert_equal [ pin_flags_feature_tags(:popular_feature), pin_flags_feature_tags(:live_feature) ].sort, FeatureTag.enabled.to_a.sort
     end
 
     test "disabled scope returns only disabled feature tags" do
-      FeatureTag.create!(name: "enabled_test", enabled: true)
-      disabled_tag = FeatureTag.create!(name: "disabled_test", enabled: false)
-      assert_equal [ disabled_tag, pin_flags_feature_tags(:beta_feature) ].sort, FeatureTag.disabled.to_a.sort
+      assert_equal [ pin_flags_feature_tags(:old_feature), pin_flags_feature_tags(:beta_feature) ].sort, FeatureTag.disabled.to_a.sort
     end
 
     # .enabled?
@@ -61,15 +56,15 @@ module PinFlags
 
     # .enable
     test "enable method enables a feature tag" do
-      feature_tag = FeatureTag.create!(name: "test_enable", enabled: false)
-      FeatureTag.enable("test_enable")
+      feature_tag = pin_flags_feature_tags(:beta_feature)
+      FeatureTag.enable(feature_tag.name)
       assert feature_tag.reload.enabled
     end
 
     # .disable
     test "disable method disables a feature tag" do
-      feature_tag = FeatureTag.create!(name: "test_disable", enabled: true)
-      FeatureTag.disable("test_disable")
+      feature_tag = pin_flags_feature_tags(:live_feature)
+      FeatureTag.disable(feature_tag.name)
       assert_not feature_tag.reload.enabled
     end
 
