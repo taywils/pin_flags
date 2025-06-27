@@ -2,8 +2,6 @@ require "test_helper"
 
 module PinFlags
   class FeatureTagTest < ActiveSupport::TestCase
-    set_fixture_class pin_flags_feature_tags: PinFlags::FeatureTag
-
     # Normalizations
     test "normalizes name from various formats" do
       tag_names = [ "Foo Bar", "  Foo Bar  ", "Foo Bar", "Foo  Bar" ]
