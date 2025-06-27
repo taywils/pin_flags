@@ -13,18 +13,18 @@ module PinFlags
 
     test "ensures name uniqueness after normalization" do
       feature_tag = FeatureTag.new(name: "  Live Feature  ", enabled: true)
-      assert_not feature_tag.valid?
+      refute feature_tag.valid?
     end
 
     # Validations
     test "validates presence of name" do
       tag = FeatureTag.new(name: "", enabled: true)
-      assert_not tag.valid?
+      refute tag.valid?
     end
 
     test "validates uniqueness of name" do
       tag = FeatureTag.new(name: pin_flags_feature_tags(:live_feature).name, enabled: true)
-      assert_not tag.valid?
+      refute tag.valid?
     end
 
     # Scopes
@@ -42,7 +42,7 @@ module PinFlags
     end
 
     test "enabled? returns false for disabled tag" do
-      assert_not FeatureTag.enabled?("beta_feature")
+      refute FeatureTag.enabled?("beta_feature")
     end
 
     # .disabled?
@@ -51,7 +51,7 @@ module PinFlags
     end
 
     test "disabled? returns false for enabled tag" do
-      assert_not FeatureTag.disabled?("live_feature")
+      refute FeatureTag.disabled?("live_feature")
     end
 
     # .enable
@@ -65,7 +65,7 @@ module PinFlags
     test "disable method disables a feature tag" do
       feature_tag = pin_flags_feature_tags(:live_feature)
       FeatureTag.disable(feature_tag.name)
-      assert_not feature_tag.reload.enabled
+      refute feature_tag.reload.enabled
     end
 
     # .feature_taggable_models
@@ -117,7 +117,7 @@ module PinFlags
 
       # Test a few specific imports
       assert FeatureTag.find_by(name: "ai_questionnaire_descriptions").enabled
-      assert_not FeatureTag.find_by(name: "beta_version").enabled
+      refute FeatureTag.find_by(name: "beta_version").enabled
       assert FeatureTag.find_by(name: "silly_feature").enabled
     end
 
