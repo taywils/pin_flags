@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module PinFlags
   module FeatureTaggable
     extend ActiveSupport::Concern

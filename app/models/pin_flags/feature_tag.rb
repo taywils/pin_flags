@@ -1,24 +1,9 @@
-# frozen_string_literal: true
-
-# == Schema Information
-#
-# Table name: feature_tags
-#
-#  id         :integer          not null, primary key
-#  enabled    :boolean          default(FALSE), not null
-#  name       :string           not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#
-# Indexes
-#
-#  index_feature_tags_on_name  (name) UNIQUE
-#
-
 module PinFlags
   class FeatureTagImportError < StandardError; end
 
   class FeatureTag < ApplicationRecord
+    self.table_name = "pin_flags_feature_tags"
+
     has_many :feature_subscriptions, dependent: :destroy
     has_many :feature_taggables, through: :feature_subscriptions
 
