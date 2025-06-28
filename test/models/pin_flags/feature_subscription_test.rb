@@ -116,5 +116,44 @@ module PinFlags
     test "uses correct table name" do
       assert_equal "pin_flags_feature_subscriptions", FeatureSubscription.table_name
     end
+
+    test "feature_tag_unpin removes feature tag" do
+      @user.feature_tag_pin(@feature_tag.name)
+      assert @user.feature_tag?(@feature_tag.name)
+
+      @user.feature_tag_unpin(@feature_tag.name)
+      refute @user.feature_tag?(@feature_tag.name)
+    end
+
+    test "feature_tag? returns true when user has feature tag" do
+      @user.feature_tag_pin(@feature_tag.name)
+      assert @user.feature_tag?(@feature_tag.name)
+    end
+
+    test "feature_tag? returns false when user does not have feature tag" do
+      refute @user.feature_tag?(@feature_tag.name)
+    end
+
+    test "feature_tag_enabled? returns true for enabled pinned tags" do
+      @user.feature_tag_pin(@feature_tag.name)  # @feature_tag is enabled
+      assert @user.feature_tag_enabled?(@feature_tag.name)
+    end
+
+    test "feature_tag_disabled? returns true for disabled pinned tags" do
+      disabled_tag = FeatureTag.create!(name: "disabled_feature", enabled: false)
+      @user.feature_tag_pin(disabled_tag.name)
+      assert @user.feature_tag_disabled?(disabled_tag.name)
+    end
+
+    test "feature_tag_pin raises RecordInvalid on duplicate pins" do
+      @user.feature_tag_pin(@feature_tag.name)
+
+      assert_raises(ActiveRecord::RecordInvalid) do
+        @user.feature_tag_pin(@feature_tag.name)  # Should raise error on duplicate
+      end
+
+      # Should still only have one subscription after the failed attempt
+      assert_equal 1, @user.feature_subscriptions.count
+    end
   end
 end

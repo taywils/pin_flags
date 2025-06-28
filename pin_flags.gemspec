@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.authors     = [ "Demetrious Wilson" ]
   spec.email       = [ "demetriouswilson@gmail.com" ]
   spec.homepage    = ""
-  spec.summary     = "PinFlags is a granular, polymorphic feature access system"
+  spec.summary     = "⛳PinFlags is a granular, polymorphic feature access system"
   spec.description = "TODO: Description of PinFlags."
   spec.license     = "MIT"
 
