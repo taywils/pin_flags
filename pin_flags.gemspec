@@ -18,4 +18,5 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency "rails", ">= 8.0.2"
+  spec.add_development_dependency "debug", ">= 1.0.0"
 end
