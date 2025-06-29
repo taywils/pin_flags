@@ -18,5 +18,12 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency "rails", ">= 8.0.2"
+  spec.add_dependency "importmap-rails"
+  spec.add_dependency "turbo-rails"
+  spec.add_dependency "stimulus-rails"
+
   spec.add_development_dependency "debug", ">= 1.0.0"
+  spec.add_development_dependency "rubocop-performance"
+  spec.add_development_dependency "rubocop-rails-omakase"
+  spec.add_development_dependency "propshaft"
 end

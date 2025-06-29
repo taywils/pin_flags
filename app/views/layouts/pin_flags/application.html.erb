@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Pin flags</title>
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
+  <head>
+    <title>Pin Flags - <%= page_title if respond_to?(:page_title) %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
 
-  <%= yield :head %>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="turbo-cache-control" content="no-cache">
 
-  <%= stylesheet_link_tag    "pin_flags/application", media: "all" %>
-</head>
-<body>
-
-<%= yield %>
-
-</body>
+    <%= stylesheet_link_tag "pin_flags/bulma.min" %>
+    <%= stylesheet_link_tag "pin_flags/application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags "application", importmap: PinFlags.importmap if PinFlags.respond_to?(:importmap) %>
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <%= render "layouts/pin_flags/flash" if flash.any? %>
+        <%= yield %>
+      </div>
+    </section>
+  </body>
 </html>
