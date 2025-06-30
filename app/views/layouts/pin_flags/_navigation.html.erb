@@ -1,14 +1,32 @@
-<nav class="navbar is-light mb-5" role="navigation">
+<nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <div class="navbar-item">
-      <h1 class="title is-4">⛳ Pin Flags</h1>
-    </div>
+    <%= link_to pin_flags.root_path, class: "navbar-item" do %>
+      <span class="is-size-2 is-size-4-mobile has-text-weight-bold has-text-white">⛳ Pin Flags</span>
+    <% end %>
+
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
   </div>
-  
-  <div class="navbar-menu">
-    <div class="navbar-start">
-      <%# link_to "Feature Tags", pin_flags.feature_tags_path, class: "navbar-item" %>
-      <%= link_to "Feature Tags", '#', class: "navbar-item" %>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <a class="button is-primary is-dark">
+            Bulk Action
+          </a>
+          <a class="button is-info is-dark">
+            Import
+          </a>
+          <a class="button is-info is-dark">
+            Export
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </nav>
