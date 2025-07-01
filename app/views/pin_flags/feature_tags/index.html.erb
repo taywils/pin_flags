@@ -1,0 +1,68 @@
+<% content_for :title, "Feature Tags" %>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <%= link_to pin_flags.root_path, class: "navbar-item" do %>
+      <span class="is-size-2 is-size-4-mobile has-text-weight-bold has-text-white">⛳ Pin Flags</span>
+    <% end %>
+
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div class="navbar-menu">
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <%= link_to "Bulk Action", '#', 
+              class: "button is-primary is-dark" %>
+          <%= link_to "Import", '#', 
+              class: "button is-info is-dark" %>
+          <%= link_to "Export", '#',
+              class: "button is-info is-dark" if @feature_tags.any? %>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<%= turbo_frame_tag :new_feature_tag do %>
+  <div class="mt-4">
+    <%= render 'new_feature_tag_link' %>
+  </div>
+<% end %>
+
+<div class="mt-5">
+  <%= form_with url: pin_flags.feature_tags_path, method: :get do |form| %>
+    <div class="columns">
+      <div class="column">
+        <%= form.search_field :filter, 
+            placeholder: "Filter by name...", 
+            class: "input is-medium", 
+            aria: { label: "Search Feature Tags" } %>
+      </div>
+      <div class="column">
+        <div class="select is-medium">
+          <%= form.select :enabled, 
+              options_for_select([
+                ['All', ''],
+                ['Yes', 'true'],
+                ['No', 'false']
+              ], params[:enabled]), 
+              {}, 
+              { aria: { label: "Filter by enabled status" } }
+          %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @feature_tags.any? %>
+  <% else %>
+    <%= render 'empty_feature_tags_table', search_param: @search_param %>
+  <% end %>
+</div>

@@ -1,3 +1,6 @@
+require "importmap-rails"
+require "turbo-rails"
+require "stimulus-rails"
 module PinFlags
   class Engine < ::Rails::Engine
     isolate_namespace PinFlags
