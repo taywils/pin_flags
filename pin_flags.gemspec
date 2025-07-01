@@ -13,13 +13,12 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
 
-  spec.files = Dir.chdir(File.expand_path(__dir__)) do
+  spec.files = Dir.chdir() do
     Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
   end
 
   spec.add_dependency "rails", ">= 8.0.2"
   spec.add_dependency "importmap-rails"
-  spec.add_dependency "turbo-rails"
   spec.add_dependency "stimulus-rails"
 
   spec.add_development_dependency "debug", ">= 1.0.0"

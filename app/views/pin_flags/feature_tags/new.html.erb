@@ -1,28 +1,26 @@
-<%= turbo_frame_tag :new_feature_tag do %>
-  <%= form_with model: [@feature_tag], url: pin_flags.feature_tags_path do |form| %>
-    <div class="field">
-      <%= form.label :name, class: "label" %>
-      <div class="control">
-        <%= form.text_field :name, class: "input", placeholder: "Enter feature tag name", autofocus: true %>
-      </div>
+<%= form_with model: @feature_tag, url: pin_flags.feature_tags_path do |form| %>
+  <div class="field">
+    <%= form.label :name, class: "label" %>
+    <div class="control">
+      <%= form.text_field :name, class: "input", placeholder: "Enter feature tag name", autofocus: true, required: true %>
     </div>
+  </div>
 
-    <div class="field">
-      <div class="control">
-        <label class="checkbox">
-          <%= form.check_box :enabled %>
-          Enabled?
-        </label>
-      </div>
+  <div class="field">
+    <div class="control">
+      <label class="checkbox">
+        <%= form.check_box :enabled %>
+        Enabled?
+      </label>
     </div>
+  </div>
 
-    <div class="field is-grouped">
-      <div class="control">
-        <%= form.submit "Create Feature Tag", class: "button is-success is-outlined" %>
-      </div>
-      <div class="control">
-        <%= link_to "Cancel", pin_flags.feature_tags_path, class: "button is-danger is-outlined" %>
-      </div>
+  <div class="field is-grouped">
+    <div class="control">
+      <%= form.submit "Create Feature Tag", class: "button is-success is-outlined" %>
     </div>
-  <% end %>
+    <div class="control">
+      <%= link_to "Cancel", pin_flags.feature_tags_path, class: "button is-danger is-outlined" %>
+    </div>
+  </div>
 <% end %>

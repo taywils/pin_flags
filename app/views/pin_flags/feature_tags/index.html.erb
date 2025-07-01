@@ -30,11 +30,9 @@
   </div>
 </nav>
 
-<%= turbo_frame_tag :new_feature_tag do %>
-  <div class="mt-4">
-    <%= render 'new_feature_tag_link' %>
-  </div>
-<% end %>
+<div class="mt-4">
+  <%= render 'new_feature_tag_link' %>
+</div>
 
 <div class="mt-5">
   <%= form_with url: pin_flags.feature_tags_path, method: :get do |form| %>
