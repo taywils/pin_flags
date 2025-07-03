@@ -31,7 +31,9 @@
 </nav>
 
 <div class="mt-4">
-  <%= render 'new_feature_tag_link' %>
+  <%= turbo_frame_tag :new_feature_tag do %>
+    <%= render 'new_feature_tag_link' %>
+  <% end %>
 </div>
 
 <div class="mt-5">
@@ -47,7 +49,7 @@
         <div class="select is-medium">
           <%= form.select :enabled, 
               options_for_select([
-                ['All', ''],
+                ['Enabled?', ''],
                 ['Yes', 'true'],
                 ['No', 'false']
               ], params[:enabled]), 
