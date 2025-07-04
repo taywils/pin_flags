@@ -17,6 +17,9 @@ module PinFlags
 
     scope :enabled, -> { where(enabled: true) }
     scope :disabled, -> { where(enabled: false) }
+    scope :with_name_like, ->(name) {
+      where("LOWER(name) LIKE LOWER(?)", "%#{normalize_tag_name(name)}%")
+    }
 
     after_commit :clear_cache
 

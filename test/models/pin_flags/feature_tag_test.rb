@@ -36,6 +36,44 @@ module PinFlags
       assert_equal [ pin_flags_feature_tags(:old_feature), pin_flags_feature_tags(:beta_feature) ].sort, FeatureTag.disabled.to_a.sort
     end
 
+    test "with_name_like matches partial, case-insensitive, and normalized names" do
+      live_feature    = pin_flags_feature_tags(:live_feature)
+      popular_feature = pin_flags_feature_tags(:popular_feature)
+      beta_feature    = pin_flags_feature_tags(:beta_feature)
+      old_feature     = pin_flags_feature_tags(:old_feature)
+
+      # Should match on partials for "live_feature"
+      assert_includes FeatureTag.with_name_like("live"), live_feature
+      assert_includes FeatureTag.with_name_like("LIVE"), live_feature
+      assert_includes FeatureTag.with_name_like("feature"), live_feature
+      assert_includes FeatureTag.with_name_like("  Live  "), live_feature
+      assert_includes FeatureTag.with_name_like("live_feature"), live_feature
+      assert_includes FeatureTag.with_name_like("LIV"), live_feature
+
+      # Should match on partials for "popular_feature"
+      assert_includes FeatureTag.with_name_like("popular"), popular_feature
+      assert_includes FeatureTag.with_name_like("POPULAR"), popular_feature
+      assert_includes FeatureTag.with_name_like("pop"), popular_feature
+
+      # Should match on partials for "beta_feature"
+      assert_includes FeatureTag.with_name_like("beta"), beta_feature
+      assert_includes FeatureTag.with_name_like("BETA"), beta_feature
+
+      # Should match on partials for "old_feature"
+      assert_includes FeatureTag.with_name_like("old"), old_feature
+      assert_includes FeatureTag.with_name_like("OLD"), old_feature
+
+      # Should not match unrelated search terms
+      refute_includes FeatureTag.with_name_like("notfound"), live_feature
+      refute_includes FeatureTag.with_name_like("xyz"), popular_feature
+      refute_includes FeatureTag.with_name_like("random"), beta_feature
+
+      # Cross-fixture negative tests
+      refute_includes FeatureTag.with_name_like("beta"), live_feature
+      refute_includes FeatureTag.with_name_like("popular"), beta_feature
+      refute_includes FeatureTag.with_name_like("old"), live_feature
+    end
+
     # .enabled?
     test "enabled? returns true for enabled tag" do
       assert FeatureTag.enabled?("live_feature")

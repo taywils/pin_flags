@@ -67,13 +67,15 @@ module PinFlags
     end
 
     def fetch_feature_tags
-      feature_tags = FeatureTag.all.order(created_at: :desc)
-      feature_tags = feature_tags.where("LOWER(name) LIKE ?", "%#{@filter_param.downcase}%") if @filter_param.present?
-      if @enabled_param.present?
-        enabled = ActiveModel::Type::Boolean.new.cast(@enabled_param)
-        feature_tags = feature_tags.where(enabled: enabled)
-      end
-      feature_tags
+      scope = FeatureTag.all.order(created_at: :desc)
+      scope = scope.with_name_like(@filter_param) if @filter_param.present?
+      scope = filter_by_enabled_status(scope) if @enabled_param.present?
+      scope
+    end
+
+    def filter_by_enabled_status(scope)
+      enabled = ActiveModel::Type::Boolean.new.cast(@enabled_param)
+      enabled ? scope.enabled : scope.disabled
     end
 
     def handle_success(action)
