@@ -1,0 +1,3 @@
+<%= turbo_stream.replace(display_feature_tag_table_turbo_frame_row_id(@feature_tag)) do %>
+  <%= render 'feature_tags_table_row', feature_tag: @feature_tag %>
+<% end %>
