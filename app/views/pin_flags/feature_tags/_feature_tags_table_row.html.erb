@@ -2,7 +2,14 @@
 
 <tr id="<%= display_feature_tag_table_turbo_frame_row_id(feature_tag) %>">
   <td><%= feature_tag.name %></td>
-  <td><%= feature_tag.enabled? %></td>
+  <td>
+    <%= form_with model: feature_tag, url: pin_flags.feature_tag_path(feature_tag),
+        method: :patch,
+        data: { controller: 'form-submit' },
+        class: 'form-inline' do |f| %>
+      <%= f.check_box :enabled, class: 'checkbox', data: { action: 'change->form-submit#submit' } %>
+    <% end %>
+  </td>
   <td>
     <%= link_to 'Delete', feature_tag, method: :delete,
         data: {
