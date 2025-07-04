@@ -3,6 +3,7 @@ module PinFlags
     rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
 
     before_action :set_filter_param, only: %i[index show]
+    before_action :set_enabled_param, only: %i[index show]
     before_action :set_feature_taggable_type, only: %i[show]
     before_action :set_feature_tag, only: %i[show update destroy]
 
@@ -57,6 +58,10 @@ module PinFlags
       @filter_param = params.fetch(:filter, nil)
     end
 
+    def set_enabled_param
+      @enabled_param = params.fetch(:enabled, nil)
+    end
+
     def set_feature_taggable_type
       @feature_taggable_type = params.fetch(:feature_taggable_type, nil)
     end
@@ -64,6 +69,10 @@ module PinFlags
     def fetch_feature_tags
       feature_tags = FeatureTag.all.order(created_at: :desc)
       feature_tags = feature_tags.where("LOWER(name) LIKE ?", "%#{@filter_param.downcase}%") if @filter_param.present?
+      if @enabled_param.present?
+        enabled = ActiveModel::Type::Boolean.new.cast(@enabled_param)
+        feature_tags = feature_tags.where(enabled: enabled)
+      end
       feature_tags
     end
 

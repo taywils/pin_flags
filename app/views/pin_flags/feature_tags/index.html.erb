@@ -63,11 +63,16 @@
           <%= form.select :enabled, 
               options_for_select([
                 ['Enabled?', ''],
-                ['Yes', 'true'],
-                ['No', 'false']
+                ['Enabled', 'true'],
+                ['Disabled', 'false']
               ], params[:enabled]), 
               {}, 
-              { aria: { label: "Filter by enabled status" } }
+              {
+                aria: { label: "Filter by enabled status" },
+                data: {
+                  action: "change->pin-flags-submit-debounce#activate"
+                }
+              }
           %>
         </div>
       </div>
@@ -80,7 +85,7 @@
     <% end %>
   <% else %>
     <%= turbo_frame_tag :feature_tags_table do %>
-      <%= render 'empty_feature_tags_table', filter_param: @filter_param %>
+      <%= render 'empty_feature_tags_table', filter_param: @filter_param, enabled_param: @enabled_param %>
     <% end %>
   <% end %>
 </div>
