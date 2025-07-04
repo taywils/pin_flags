@@ -1,0 +1,14 @@
+<%# locals: (feature_tag:) %>
+
+<tr id="<%= display_feature_tag_table_turbo_frame_row_id(feature_tag) %>">
+  <td><%= feature_tag.name %></td>
+  <td><%= feature_tag.enabled? %></td>
+  <td>
+    <%= link_to 'Delete', feature_tag, method: :delete,
+        data: {
+          turbo_method: :delete,
+          turbo_confirm: display_feature_tag_row_delete_confirmation(feature_tag),
+        },
+        class: 'button is-small is-danger' %>
+  </td>
+</tr>

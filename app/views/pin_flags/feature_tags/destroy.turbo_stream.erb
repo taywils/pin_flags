@@ -1,0 +1,7 @@
+<%= turbo_stream.remove(display_feature_tag_table_turbo_frame_row_id(@feature_tag)) %>
+
+<% unless PinFlags::FeatureTag.exists? %>
+  <%= turbo_stream.update :feature_tags_table do %>
+    <%= render 'empty_feature_tags_table', filter_param: @filter_param %>
+  <% end %>
+<% end %>

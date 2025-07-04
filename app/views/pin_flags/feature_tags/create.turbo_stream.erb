@@ -1,0 +1,7 @@
+<%= turbo_stream.update :new_feature_tag do %>
+  <%= render 'new_feature_tag_link' %>
+<% end %>
+
+<%= turbo_stream.update :feature_tags_table do %>
+  <%= render 'feature_tags_table', feature_tags: @feature_tags %>
+<% end %>

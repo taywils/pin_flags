@@ -1,9 +1,15 @@
 <%= turbo_frame_tag :new_feature_tag do %>
   <%= form_with model: @feature_tag, url: pin_flags.feature_tags_path do |form| %>
+    <%= render "pin_flags/shared/error_messages", resource: @feature_tag %>
+
     <div class="field">
       <%= form.label :name, class: "label" %>
       <div class="control">
-        <%= form.text_field :name, class: "input", placeholder: "Enter feature tag name", autofocus: true, required: true %>
+        <%= form.text_field :name, class: "input",
+            placeholder: "Enter feature tag name",
+            minlength: PinFlags::FeatureTag::MIN_NAME_LENGTH,
+            maxlength: PinFlags::FeatureTag::MAX_NAME_LENGTH,
+            autofocus: true, required: true %>
       </div>
     </div>
 

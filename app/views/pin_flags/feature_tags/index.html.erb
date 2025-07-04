@@ -62,7 +62,12 @@
   <% end %>
 
   <% if @feature_tags.any? %>
+    <%= turbo_frame_tag :feature_tags_table do %>
+      <%= render 'feature_tags_table', feature_tags: @feature_tags %>
+    <% end %>
   <% else %>
-    <%= render 'empty_feature_tags_table', search_param: @search_param %>
+    <%= turbo_frame_tag :feature_tags_table do %>
+      <%= render 'empty_feature_tags_table', filter_param: @filter_param %>
+    <% end %>
   <% end %>
 </div>

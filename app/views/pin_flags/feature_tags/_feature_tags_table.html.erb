@@ -1,0 +1,25 @@
+<%# locals: (feature_tags:) %>
+
+<section class="mt-6">
+  <div class="table">
+    <table class="table is-striped is-hoverable is-fullwidth">
+      <thead>
+        <tr>
+          <th><abbr title="Feature Flag Name">Name</abbr></th>
+          <th><abbr title="Feature Flag Status">Enabled?</abbr></th>
+          <th><abbr title="Available Actions">Actions</abbr></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: 'feature_tags_table_row', collection: feature_tags, as: :feature_tag %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td><abbr title="Feature Flag Name">Name</abbr></td>
+          <td><abbr title="Feature Flag Status">Enabled?</abbr></td>
+          <td><abbr title="Available Actions">Actions</abbr></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</section>
