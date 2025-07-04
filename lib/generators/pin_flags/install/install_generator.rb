@@ -12,6 +12,7 @@ module PinFlags
 
       def copy_stimulus_controllers
         copy_file "stimulus/pin_flags_form_submit_controller.js", "app/javascript/controllers/pin_flags_form_submit_controller.js"
+        copy_file "stimulus/pin_flags_submit_debounce_controller.js", "app/javascript/controllers/pin_flags_submit_debounce_controller.js"
       end
 
       def self.next_migration_number(dirname)

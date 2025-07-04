@@ -9,7 +9,7 @@ module PinFlags
     PER_PAGE ||= 10
 
     def index
-      @feature_tags = PinFlags::FeatureTag.all
+      @feature_tags = fetch_feature_tags
     end
 
     def show
@@ -23,7 +23,7 @@ module PinFlags
       @feature_tag = PinFlags::FeatureTag.new(feature_tag_params)
 
       if @feature_tag.save
-        @feature_tags = PinFlags::FeatureTag.all
+        @feature_tags = fetch_feature_tags
         handle_success(:create)
       else
         render :new, status: :unprocessable_content
@@ -54,11 +54,17 @@ module PinFlags
     end
 
     def set_filter_param
-      @set_filter_param = params.fetch(:filter, nil)
+      @filter_param = params.fetch(:filter, nil)
     end
 
     def set_feature_taggable_type
       @feature_taggable_type = params.fetch(:feature_taggable_type, nil)
+    end
+
+    def fetch_feature_tags
+      feature_tags = FeatureTag.all.order(created_at: :desc)
+      feature_tags = feature_tags.where("LOWER(name) LIKE ?", "%#{@filter_param.downcase}%") if @filter_param.present?
+      feature_tags
     end
 
     def handle_success(action)

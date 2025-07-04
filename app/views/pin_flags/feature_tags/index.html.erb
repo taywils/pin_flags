@@ -37,13 +37,26 @@
 </div>
 
 <div class="mt-5">
-  <%= form_with url: pin_flags.feature_tags_path, method: :get do |form| %>
+  <%= form_with url: pin_flags.feature_tags_path, method: :get,
+      data: {
+        turbo_frame: :feature_tags_table,
+        controller: "pin-flags-submit-debounce",
+        "pin-flags-submit-debounce-target": "form"
+      } do |form| %>
     <div class="columns">
       <div class="column">
         <%= form.search_field :filter, 
             placeholder: "Filter by name...", 
+            autocomplete: "off",
+            value: @filter_param || "",
+            maxlength: PinFlags::FeatureTag::MAX_NAME_LENGTH,
+            pattern: "[^\s]+.*",
             class: "input is-medium", 
-            aria: { label: "Search Feature Tags" } %>
+            aria: { label: "Search Feature Tags" },
+            data: {
+              action: "input->pin-flags-submit-debounce#activate"
+            }
+            %>
       </div>
       <div class="column">
         <div class="select is-medium">

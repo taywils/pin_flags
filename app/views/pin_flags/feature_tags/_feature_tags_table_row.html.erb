@@ -1,7 +1,11 @@
 <%# locals: (feature_tag:) %>
 
 <tr id="<%= display_feature_tag_table_turbo_frame_row_id(feature_tag) %>">
-  <td><%= feature_tag.name %></td>
+  <td>
+    <%= link_to feature_tag, data: { turbo_frame: "_top" } do %>
+      <%= feature_tag.name %>
+    <% end %>
+  </td>
   <td>
     <%= form_with model: feature_tag, url: pin_flags.feature_tag_path(feature_tag),
         method: :patch,
