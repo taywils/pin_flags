@@ -3,7 +3,7 @@
 <tr id="<%= display_feature_tag_table_turbo_frame_row_id(feature_tag) %>">
   <td>
     <%= link_to feature_tag, data: { turbo_frame: "_top" } do %>
-      <%= feature_tag.name %>
+      <%= feature_tag.name.truncate(PinFlags::FeatureTag::MAX_NAME_LENGTH / 2) %>
     <% end %>
   </td>
   <td>

@@ -14,6 +14,7 @@ module PinFlags
     end
 
     def show
+      @feature_subscriptions = fetch_feature_subscriptions
     end
 
     def new
@@ -71,6 +72,10 @@ module PinFlags
       scope = scope.with_name_like(@filter_param) if @filter_param.present?
       scope = filter_by_enabled_status(scope) if @enabled_param.present?
       scope
+    end
+
+    def fetch_feature_subscriptions
+      @feature_tag.feature_subscriptions.order(created_at: :desc)
     end
 
     def filter_by_enabled_status(scope)

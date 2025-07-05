@@ -1,2 +1,21 @@
-<h1>FeatureTags#show</h1>
-<p>Find me in app/views/pin_flags/feature_tags/show.html.erb</p>
+<% content_for :title, "Feature Tag #{@feature_tag.name}" %>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <%= link_to pin_flags.root_path, class: "navbar-item" do %>
+      <span class="is-size-2 is-size-4-mobile has-text-weight-bold has-text-white">
+        ⛳ Pin Flags
+      </span>
+    <% end %>
+  </div>
+</nav>
+
+<p class="is-size-4 is-size-5-mobile has-text-weight-bold has-text-white is-clipped">
+  <%= @feature_tag.name %>
+</p>
+
+<div class="mt-5">
+  <%= turbo_frame_tag :new_feature_subscription do %>
+    <%# render 'new_feature_subscription_link', feature_tag: @feature_tag %>
+  <% end %>
+</div>
