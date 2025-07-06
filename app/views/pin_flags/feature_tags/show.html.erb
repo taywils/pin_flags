@@ -75,7 +75,7 @@
 
   <div class="mt-5">
     <% if @feature_subscriptions.any? %>
-      <%= turbo_frame_tag :feature_subscriptions_table, data: { turbo_action: 'advance', autoscroll_behavior: 'smooth' } do %>
+      <%= turbo_frame_tag :feature_subscriptions_table do %>
         <%= render "pin_flags/feature_tags/feature_subscriptions/feature_subscriptions_table",
             feature_tag: @feature_tag, feature_subscriptions: @feature_subscriptions
         %>

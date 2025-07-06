@@ -15,6 +15,11 @@
     <% end %>
   </td>
   <td>
+    <%= link_to feature_tag, data: { turbo_frame: "_top" } do %>
+      <%= feature_tag.feature_subscriptions.any? ? 'Yes' : 'No' %>
+    <% end %>
+  </td>
+  <td>
     <%= link_to 'Delete', feature_tag, method: :delete,
         data: {
           turbo_method: :delete,
