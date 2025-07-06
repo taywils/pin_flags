@@ -15,6 +15,10 @@ module PinFlags
 
     def show
       @feature_subscriptions = fetch_feature_subscriptions
+
+      return if @feature_taggable_type.blank?
+
+      @feature_subscriptions = @feature_subscriptions.where(feature_taggable_type: @feature_taggable_type)
     end
 
     def new
@@ -75,8 +79,19 @@ module PinFlags
     end
 
     def fetch_feature_subscriptions
-      @feature_tag.feature_subscriptions.order(created_at: :desc)
+      feature_subscriptions = @feature_tag.feature_subscriptions.order(created_at: :desc)
+
+      if @feature_taggable_type.present?
+        feature_subscriptions = feature_subscriptions.where(feature_taggable_type: @feature_taggable_type)
+      end
+
+      if @filter_param.present?
+        feature_subscriptions = feature_subscriptions.where(feature_taggable_id: @filter_param.strip)
+      end
+
+      feature_subscriptions
     end
+
 
     def filter_by_enabled_status(scope)
       enabled = ActiveModel::Type::Boolean.new.cast(@enabled_param)

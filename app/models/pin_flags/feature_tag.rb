@@ -60,9 +60,11 @@ module PinFlags
     def self.feature_taggable_models
       Rails.application.eager_load! unless Rails.application.config.eager_load
 
-      ApplicationRecord.descendants.select do |model|
-        model.included_modules.include?(FeatureTaggable)
-      end
+      # Find all classes that include FeatureTaggable
+      ObjectSpace.each_object(Class).select do |klass|
+        klass < ActiveRecord::Base &&
+        klass.included_modules.include?(PinFlags::FeatureTaggable)
+      end.uniq
     end
 
     def self.feature_taggable_options_for_select

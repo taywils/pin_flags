@@ -1,0 +1,20 @@
+<%# locals: (feature_tag:, feature_subscription:) %>
+
+<tr id="<%= display_feature_subscription_table_turbo_frame_row_id(feature_subscription) %>">
+  <td>
+    <%= feature_subscription.feature_taggable_type %>
+  </td>
+  <td>
+    <%= feature_subscription.feature_taggable_id %>
+  </td>
+  <td class="has-text-right">
+    <%= link_to pin_flags.feature_tag_feature_subscription_path(feature_tag, feature_subscription), method: :delete,
+        data: {
+          turbo_method: :delete,
+          turbo_confirm: display_feature_subscription_row_delete_confirmation(feature_subscription)
+        },
+        class: "button is-small is-danger is-outlined" do %>
+      Unsubscribe
+    <% end %>
+  </td>
+</tr>

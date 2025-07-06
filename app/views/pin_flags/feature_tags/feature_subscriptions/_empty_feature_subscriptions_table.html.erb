@@ -1,0 +1,7 @@
+<%# locals: (filter_param: nil, feature_taggable_type: nil) %>
+
+<div class="has-text-centered mt-6">
+  <p class="has-text-weight-semibold is-size-4">
+    <%= "No feature subscriptions #{(filter_param.present? || feature_taggable_type.present?) ? 'found' : 'created yet'}." %>
+  </p>
+</div>

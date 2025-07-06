@@ -1,0 +1,7 @@
+<%= turbo_stream.remove(display_feature_subscription_table_turbo_frame_row_id(@feature_subscription)) %>
+
+<% if @feature_tag.feature_subscriptions.empty? %>
+  <%= turbo_stream.update :feature_subscriptions_table do %>
+    <%= render 'pin_flags/feature_tags/feature_subscriptions/empty_feature_subscriptions_table' %>
+  <% end %>
+<% end %>

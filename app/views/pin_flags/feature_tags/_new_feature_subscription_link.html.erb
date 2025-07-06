@@ -1,0 +1,8 @@
+<%# locals: (feature_tag:) %>
+
+<div>
+  <%= link_to "New Subscription",
+      pin_flags.new_feature_tag_feature_subscription_path(feature_tag_id: feature_tag.id),
+      class: "button is-success is-outlined"
+  %>
+</div>

@@ -1,4 +1,5 @@
 <% content_for :title, "Feature Tag #{@feature_tag.name}" %>
+<%= console %>
 
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
@@ -16,6 +17,77 @@
 
 <div class="mt-5">
   <%= turbo_frame_tag :new_feature_subscription do %>
-    <%# render 'new_feature_subscription_link', feature_tag: @feature_tag %>
+    <%= render 'new_feature_subscription_link', feature_tag: @feature_tag %>
   <% end %>
+</div>
+
+<div class="container">
+  <div class="mt-6 mb-4">
+    <span class="has-text-warning has-text-weight-semibold is-size-5">
+      Filters
+    </span>
+    <hr class="has-background-warning" style="height: 2px; width: 50%;">
+  </div>
+
+  <section>
+    <%= form_with url: pin_flags.feature_tag_path(@feature_tag), method: :get, data: { turbo_frame: :feature_subscriptions_table, controller: 'pin-flags-submit-debounce', pin_flags_submit_debounce_target: 'form' } do |form| %>
+      <div class="columns">
+        <div class="column is-half">
+          <div class="field mb-4">
+            <%= form.label :feature_taggable_type, 'Taggable Type', class: "label has-text-left" %>
+            <div class="control">
+              <div class="select is-fullwidth is-medium">
+                <%= form.select :feature_taggable_type,
+                    PinFlags::FeatureTag.feature_taggable_options_for_select,
+                    {
+                      prompt: 'All Types',
+                      selected: @feature_taggable_type,
+                      include_blank: @feature_taggable_type.present?
+                    },
+                    data: {
+                      action: 'pin-flags-submit-debounce#activate'
+                    }
+                %>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <%= form.label :search, 'Taggable ID', class: 'label has-text-left' %>
+            <div class="control">
+              <%= form.search_field :filter, class: "input is-medium",
+                  placeholder: "Filter feature subscription by ID...", 
+                  autocomplete: "off", 
+                  autofocus: true,
+                  value: @search_param || "", 
+                  maxlength: PinFlags::FeatureTag::MAX_NAME_LENGTH, 
+                  pattern: "[^\s]+.*",
+                  data: {
+                    controller: 'pin-flags-input-cursor',
+                    action: 'pin-flags-submit-debounce#activate'
+                  }
+              %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </section>
+
+  <div class="mt-5">
+    <% if @feature_subscriptions.any? %>
+      <%= turbo_frame_tag :feature_subscriptions_table, data: { turbo_action: 'advance', autoscroll_behavior: 'smooth' } do %>
+        <%= render "pin_flags/feature_tags/feature_subscriptions/feature_subscriptions_table",
+            feature_tag: @feature_tag, feature_subscriptions: @feature_subscriptions
+        %>
+      <% end %>
+    <% else %>
+      <%= turbo_frame_tag :feature_subscriptions_table do %>
+        <%= render 'pin_flags/feature_tags/feature_subscriptions/empty_feature_subscriptions_table',
+            filter_param: @filter_param,
+            feature_taggable_type: @feature_taggable_type
+            %>
+      <% end %>
+    <% end %>
+  </div>
 </div>

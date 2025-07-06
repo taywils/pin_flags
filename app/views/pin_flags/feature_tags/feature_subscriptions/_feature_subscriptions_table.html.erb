@@ -1,0 +1,25 @@
+<%# locals: (feature_tag:, feature_subscriptions:) %>
+
+<section class="mt-6">
+  <table class="table is-fullwidth is-striped is-hoverable">
+    <thead>
+      <tr>
+        <th>Taggable Type</th>
+        <th>Taggable ID</th>
+        <th class="has-text-right">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% feature_subscriptions.each do |feature_subscription| %>
+        <%= render 'pin_flags/feature_tags/feature_subscriptions/feature_subscriptions_table_row', feature_tag: feature_tag, feature_subscription: feature_subscription %>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Taggable Type</th>
+        <th>Taggable ID</th>
+        <th class="has-text-right">Actions</th>
+      </tr>
+    </tfoot>
+  </table>
+</section>

@@ -1,0 +1,83 @@
+<%= turbo_frame_tag :new_feature_subscription do %>
+  <div class="container">
+    <%= form_with model: [@feature_tag, @feature_subscription], url: feature_tag_feature_subscriptions_path(@feature_tag) do |form| %>
+      <%= render "pin_flags/shared/error_messages", resource: @feature_subscription %>
+
+      <div class="columns">
+        <div class="column is-half">
+          <div class="field mb-5">
+            <div class="is-flex is-align-items-flex-start">
+              <%= form.label :feature_taggable_type, 'Feature Taggable Type', class: "label" %>
+              <span class="has-text-danger ml-1">*</span>
+            </div>
+            <p class="help is-info mb-2">
+              Must be a valid <strong>"feature_taggable_type"</strong> based on your database schema.
+            </p>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <%= form.select :feature_taggable_type,
+                    PinFlags::FeatureTag.feature_taggable_options_for_select,
+                    { prompt: 'Select Taggable Type' },
+                    required: true
+                %>
+              </div>
+            </div>
+          </div>
+
+          <section data-controller="pin-flags-new-feature-subscriptions-form">
+            <div class="field mb-4">
+              <%= form.label :bulk_upload, 'Bulk Upload?', class: 'label' %>
+              <div class="control">
+                <%= form.check_box :bulk_upload, class: 'checkbox',
+                    data: { action: "pin-flags-new-feature-subscriptions-form#toggle"}
+                %>
+              </div>
+            </div>
+
+            <div class="field mb-4">
+              <div class="is-flex is-align-items-flex-start">
+                <%= form.label :feature_taggable_id, 'Feature Taggable ID', class: "label" %>
+                <span class="has-text-danger ml-1">*</span>
+              </div>
+              <p class="help is-info mb-2">
+                Must be a valid <strong>"id"</strong> column value for the feature taggable type in the database.
+              </p>
+              <div class="control" data-pin-flags-new-feature-subscriptions-form-target="container">
+                <%= form.text_field :feature_taggable_id, class: "input",
+                    required: true, autofocus: false, autocomplete: "off",
+                    placeholder: "Enter a single Feature Taggable ID."
+                %>
+              </div>
+
+              <!-- templates for pin-flags-new-feature-subscriptions-form -->
+              <template data-pin-flags-new-feature-subscriptions-form-target="textTemplate">
+                <%= form.text_field :feature_taggable_id, class: "input",
+                    required: true, autofocus: false, autocomplete: "off",
+                    placeholder: "Enter a single Feature Taggable ID."
+                %>
+              </template>
+
+              <template data-pin-flags-new-feature-subscriptions-form-target="textareaTemplate">
+                <%= form.text_area :feature_taggable_id, class: "textarea",
+                    required: true, autofocus: false, autocomplete: "off",
+                    rows: 6,
+                    placeholder: "Enter comma separated values for Feature Taggable IDs. All IDs must be for the same Feature Taggable Type."
+                %>
+              </template> 
+              <!-- end -->
+            </div>
+          </section>
+
+          <div class="field is-grouped my-4">
+            <div class="control">
+              <%= form.submit "Create Feature Subscription", class: "button is-success is-outlined" %>
+            </div>
+            <div class="control">
+              <%= link_to "Cancel", @feature_tag, class: "button is-danger is-outlined" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

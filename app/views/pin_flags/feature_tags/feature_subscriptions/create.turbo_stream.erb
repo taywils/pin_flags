@@ -1,0 +1,7 @@
+<%= turbo_stream.update :new_feature_subscription do %>
+  <%= render 'pin_flags/feature_tags/new_feature_subscription_link', feature_tag: @feature_tag %>
+<% end %>
+
+<%= turbo_stream.update :feature_subscriptions_table do %>
+  <%= render 'pin_flags/feature_tags/feature_subscriptions/feature_subscriptions_table', feature_tag: @feature_tag, feature_subscriptions: @feature_tag.feature_subscriptions %>
+<% end %>

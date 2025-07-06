@@ -3,12 +3,18 @@ module PinFlags
     extend ActiveSupport::Concern
 
     included do
-      has_many :feature_subscriptions, as: :feature_taggable, dependent: :destroy
-      has_many :feature_tags, through: :feature_subscriptions
+      has_many  :feature_subscriptions,
+                class_name: "PinFlags::FeatureSubscription",
+                as: :feature_taggable,
+                dependent: :destroy
+
+      has_many  :feature_tags,
+                class_name: "PinFlags::FeatureTag",
+                through: :feature_subscriptions
     end
 
     def feature_tag_pin(tag_name)
-      feature_tags << FeatureTag.find_or_create_by(name: tag_name)
+      feature_tags << PinFlags::FeatureTag.find_or_create_by(name: tag_name)
     rescue ActiveRecord::RecordNotUnique
       feature_tags
     end
