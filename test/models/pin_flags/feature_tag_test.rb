@@ -143,7 +143,7 @@ module PinFlags
     end
 
     test "import_from_json handles invalid JSON" do
-      assert_raises(FeatureTagImportError) do
+      assert_raises(PinFlags::FeatureTagImportError) do
         FeatureTag.import_from_json("invalid json")
       end
     end

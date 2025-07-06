@@ -83,9 +83,9 @@ module PinFlags
       clear_all_cache
       true
     rescue JSON::ParserError
-      raise FeatureTagImportError, "Invalid JSON format"
+      raise PinFlags::FeatureTagImportError, "Invalid JSON format"
     rescue StandardError => e
-      raise FeatureTagImportError, "Import failed: #{e.message}"
+      raise PinFlags::FeatureTagImportError, "Import failed: #{e.message}"
     end
 
     def self.normalize_tag_name(tag_name)
