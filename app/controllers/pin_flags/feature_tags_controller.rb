@@ -72,7 +72,7 @@ module PinFlags
     end
 
     def fetch_feature_tags
-      scope = FeatureTag.all.order(created_at: :desc)
+      scope = FeatureTag.all.includes(:feature_subscriptions).order(created_at: :desc)
       scope = scope.with_name_like(@filter_param) if @filter_param.present?
       scope = filter_by_enabled_status(scope) if @enabled_param.present?
       scope

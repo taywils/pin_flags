@@ -3,8 +3,6 @@ module PinFlags
     class ImportsController < ApplicationController
       MAX_FILE_SIZE ||= 2.megabytes
 
-      def new; end
-
       def create
         if valid_json_file? && import_successful?
           respond_with_success

@@ -1,6 +1,6 @@
 PinFlags::Engine.routes.draw do
   namespace :feature_tags do
-    resources :imports, only: %i[new create]
+    resources :imports, only: %i[create]
     resources :exports, only: %i[index]
   end
 
