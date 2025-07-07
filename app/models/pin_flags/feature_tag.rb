@@ -75,6 +75,7 @@ module PinFlags
       all.as_json(only: [ :name, :enabled ]).to_json
     end
 
+    # TODO: importing from large JSON files can be memory intensive. Might need to implement a streaming parser or batch processing for large datasets.
     def self.import_from_json(json)
       JSON.parse(json).each do |feature_tag_data|
         feature_tag = find_or_initialize_by(name: feature_tag_data["name"])

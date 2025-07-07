@@ -79,6 +79,7 @@ module PinFlags
     end
 
     def fetch_feature_subscriptions
+      # TODO: Check for "N + 1" queries here
       feature_subscriptions = @feature_tag.feature_subscriptions.order(created_at: :desc)
 
       if @feature_taggable_type.present?
