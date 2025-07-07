@@ -1,0 +1,48 @@
+<div class="container is-max-desktop">
+  <div class="columns is-centered">
+    <div class="column is-narrow">
+      <%= form_with url: feature_tags_imports_path, data: { turbo: false } do |form| %>
+        <div class="field mb-4">
+          <div class="is-flex is-align-items-flex-start">
+            <%= form.label :json_file, 'FeatureTag JSON File', class: "label" %>
+            <span class="has-text-danger ml-1">*</span>
+          </div>
+          <p class="help is-info mb-2">
+            File must be <strong>less than <%= number_to_human_size(PinFlags::FeatureTags::ImportsController::MAX_FILE_SIZE) %></strong>.
+          </p>
+          <div class="control" data-controller="pin-flags-file-size" data-pin-flags-file-size-max-value="<%= PinFlags::FeatureTags::ImportsController::MAX_FILE_SIZE %>">
+            <div class="file has-name is-fullwidth">
+              <label class="file-label">
+                <%= form.file_field :json_file, class: "file-input",
+                    required: true, accept: ".json",
+                    data: {
+                      pin_flags_file_size_target: 'input',
+                      action: 'change->pin-flags-file-size#validate',
+                    }
+                %>
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="fas fa-upload"></i>
+                  </span>
+                  <span class="file-label">Choose a file…</span>
+                </span>
+                <span class="file-name" data-pin-flags-file-size-target="fileName">
+                  No file selected
+                </span>
+              </label>
+            </div>
+            <p class="help is-danger is-hidden" data-pin-flags-file-size-target="error">
+              File size must be less than <%= number_to_human_size(PinFlags::FeatureTags::ImportsController::MAX_FILE_SIZE) %>.
+            </p>
+          </div>
+        </div>
+
+        <div class="field is-grouped">
+          <div class="control is-expanded">
+            <%= form.submit "Upload", class: "button is-primary is-fullwidth" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

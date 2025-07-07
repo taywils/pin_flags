@@ -16,6 +16,7 @@ module PinFlags
         copy_file "stimulus/pin_flags_new_feature_subscriptions_form_controller.js", "app/javascript/controllers/pin_flags_new_feature_subscriptions_form_controller.js"
         copy_file "stimulus/pin_flags_input_cursor_controller.js", "app/javascript/controllers/pin_flags_input_cursor_controller.js"
         copy_file "stimulus/pin_flags_js_modal_trigger_controller.js", "app/javascript/controllers/pin_flags_js_modal_trigger_controller.js"
+        copy_file "stimulus/pin_flags_file_size_controller.js", "app/javascript/controllers/pin_flags_file_size_controller.js"
       end
 
       def self.next_migration_number(dirname)
