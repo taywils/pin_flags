@@ -1,6 +1,6 @@
 <% content_for :title, "Feature Tags" %>
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar" role="navigation" aria-label="main navigation" data-controller="pin-flags-navbar-burger">
   <div class="navbar-brand">
     <%= link_to pin_flags.root_path, class: "navbar-item" do %>
       <span class="is-size-2 is-size-4-mobile has-text-weight-bold has-text-white">
@@ -8,7 +8,9 @@
       </span>
     <% end %>
 
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+       data-pin-flags-navbar-burger-target="burger"
+       data-action="click->pin-flags-navbar-burger#toggle">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
@@ -16,7 +18,7 @@
     </a>
   </div>
 
-  <div class="navbar-menu">
+  <div class="navbar-menu" data-pin-flags-navbar-burger-target="menu">
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons">
