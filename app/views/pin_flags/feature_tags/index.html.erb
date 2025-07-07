@@ -20,8 +20,12 @@
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons">
-          <%= link_to "Import", '#', 
-              class: "button is-info is-dark" %>
+          <button class="button is-primary is-dark"
+                  data-controller="pin-flags-js-modal-trigger" 
+                  data-action="pin-flags-js-modal-trigger#open"
+                  data-pin-flags-js-modal-trigger-modal-id-value="pin-flags-import-form-modal">
+            Import
+          </button>
           <%= link_to "Export", pin_flags.feature_tags_exports_path(format: :json),
               class: "button is-info is-dark" %>
         </div>

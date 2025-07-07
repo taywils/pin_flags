@@ -20,5 +20,11 @@
         <%= yield %>
       </div>
     </section>
+
+    <%= render "layouts/pin_flags/modal",
+        modal_id: "pin-flags-import-form-modal",
+        title: "Import Feature Tags" do %>
+      <p>Test!</p>
+    <% end %>
   </body>
 </html>

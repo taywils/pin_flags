@@ -1,0 +1,36 @@
+<%# locals: (modal_id:, title:, body_content: nil, footer_buttons: nil) %>
+
+<div class="modal" id="<%= modal_id %>">
+  <div class="modal-background" 
+       data-controller="pin-flags-js-modal-trigger"
+       data-action="click->pin-flags-js-modal-trigger#close"></div>
+  
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title"><%= title %></p>
+      <button class="delete" 
+              data-controller="pin-flags-js-modal-trigger"
+              data-action="click->pin-flags-js-modal-trigger#close"></button>
+    </header>
+    
+    <section class="modal-card-body">
+      <% if body_content %>
+        <%= body_content %>
+      <% else %>
+        <%= yield %>
+      <% end %>
+    </section>
+    
+    <footer class="modal-card-foot">
+      <% if footer_buttons %>
+        <%= footer_buttons %>
+      <% else %>
+        <button class="button" 
+                data-controller="pin-flags-js-modal-trigger"
+                data-action="click->pin-flags-js-modal-trigger#close">
+          Cancel
+        </button>
+      <% end %>
+    </footer>
+  </div>
+</div>
