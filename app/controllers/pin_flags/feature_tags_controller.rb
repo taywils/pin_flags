@@ -15,10 +15,6 @@ module PinFlags
 
     def show
       @feature_subscriptions = fetch_feature_subscriptions
-
-      return if @feature_taggable_type.blank?
-
-      @feature_subscriptions = @feature_subscriptions.where(feature_taggable_type: @feature_taggable_type)
     end
 
     def new
@@ -79,7 +75,6 @@ module PinFlags
     end
 
     def fetch_feature_subscriptions
-      # TODO: Check for "N + 1" queries here
       feature_subscriptions = @feature_tag.feature_subscriptions.order(created_at: :desc)
 
       if @feature_taggable_type.present?
