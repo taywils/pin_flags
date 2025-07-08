@@ -75,12 +75,27 @@ module PinFlags
       all.as_json(only: [ :name, :enabled ]).to_json
     end
 
-    # TODO: importing from large JSON files can be memory intensive. Might need to implement a streaming parser or batch processing for large datasets.
-    def self.import_from_json(json)
-      JSON.parse(json).each do |feature_tag_data|
-        feature_tag = find_or_initialize_by(name: feature_tag_data["name"])
-        feature_tag.update!(enabled: feature_tag_data["enabled"])
+    def self.import_from_json(json, batch_size: 1000)
+      data = JSON.parse(json)
+
+      data.each_slice(batch_size) do |batch|
+        normalized_batch = batch.map do |item|
+          {
+            name: normalize_tag_name(item["name"]),
+            enabled: item["enabled"],
+            created_at: Time.current,
+            updated_at: Time.current
+          }
+        end
+
+        # Use upsert_all for efficient bulk operations
+        upsert_all(
+          normalized_batch,
+          unique_by: :name,
+          update_only: [ :enabled, :updated_at ]
+        )
       end
+
       clear_all_cache
       true
     rescue JSON::ParserError
