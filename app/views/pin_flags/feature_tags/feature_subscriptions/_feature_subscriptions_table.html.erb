@@ -7,19 +7,20 @@
         <tr>
           <th><abbr title="Feature Taggable Type">Taggable Type</abbr></th>
           <th><abbr title="Feature Taggable ID">Taggable ID</abbr></th>
-          <th class="has-text-right"><abbr title="Available Actions">Actions</abbr></th>
+          <th><abbr title="Available Actions">Actions</abbr></th>
         </tr>
       </thead>
       <tbody>
-        <% feature_subscriptions.each do |feature_subscription| %>
-          <%= render 'pin_flags/feature_tags/feature_subscriptions/feature_subscriptions_table_row', feature_tag: feature_tag, feature_subscription: feature_subscription %>
-        <% end %>
+        <%= render partial: 'pin_flags/feature_tags/feature_subscriptions/feature_subscriptions_table_row',
+                   collection: feature_subscriptions,
+                   as: :feature_subscription,
+                   locals: { feature_tag: feature_tag } %>
       </tbody>
       <tfoot>
         <tr>
           <td><abbr title="Feature Taggable Type">Taggable Type</abbr></td>
           <td><abbr title="Feature Taggable ID">Taggable ID</abbr></td>
-          <td class="has-text-right"><abbr title="Available Actions">Actions</abbr></td>
+          <td><abbr title="Available Actions">Actions</abbr></td>
         </tr>
       </tfoot>
     </table>
