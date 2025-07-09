@@ -9,10 +9,12 @@ module PinFlags
 
     PER_PAGE ||= 10
 
+    # TODO: Add pagination support
     def index
       @feature_tags = fetch_feature_tags
     end
 
+    # TODO: Add pagination support
     def show
       @feature_subscriptions = fetch_feature_subscriptions
     end
