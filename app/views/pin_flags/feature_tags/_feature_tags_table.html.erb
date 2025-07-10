@@ -1,4 +1,4 @@
-<%# locals: (feature_tags:, paginator:) %>
+<%# locals: (feature_tags:, paginator:, filter_param: nil, enabled_param: nil) %>
 
 <section class="mt-6">
   <div class="table-container">
@@ -28,19 +28,19 @@
   <% if paginator.pages_count && paginator.pages_count > 1 %>
     <nav class="pagination mt-4" role="navigation" aria-label="pagination">
       <% unless paginator.first? %>
-        <%= link_to "Previous", pin_flags.feature_tags_path(page: paginator.previous_index, search: params[:search], enabled: params[:enabled]), 
+        <%= link_to "Previous", pin_flags.feature_tags_path(page: paginator.previous_index, filter: filter_param, enabled: enabled_param),
             class: "pagination-previous" %>
       <% end %>
 
       <% unless paginator.last? %>
-        <%= link_to "Next page", pin_flags.feature_tags_path(page: paginator.next_index, search: params[:search], enabled: params[:enabled]), 
+        <%= link_to "Next page", pin_flags.feature_tags_path(page: paginator.next_index, filter: filter_param, enabled: enabled_param),
             class: "pagination-next" %>
       <% end %>
 
       <ul class="pagination-list">
         <% if paginator.index > 3 %>
           <li>
-            <%= link_to "1", pin_flags.feature_tags_path(page: 1, search: params[:search], enabled: params[:enabled]), 
+            <%= link_to "1", pin_flags.feature_tags_path(page: 1, filter: filter_param, enabled: enabled_param),
                 class: "pagination-link", "aria-label": "Goto page 1" %>
           </li>
           <% if paginator.index > 4 %>
@@ -59,7 +59,7 @@
                 <%= page %>
               </span>
             <% else %>
-              <%= link_to page, pin_flags.feature_tags_path(page: page, search: params[:search], enabled: params[:enabled]), 
+              <%= link_to page, pin_flags.feature_tags_path(page: page, filter: filter_param, enabled: enabled_param),
                   class: "pagination-link", "aria-label": "Goto page #{page}" %>
             <% end %>
           </li>
@@ -72,7 +72,7 @@
             </li>
           <% end %>
           <li>
-            <%= link_to paginator.pages_count, pin_flags.feature_tags_path(page: paginator.pages_count, search: params[:search], enabled: params[:enabled]), 
+            <%= link_to paginator.pages_count, pin_flags.feature_tags_path(page: paginator.pages_count, filter: filter_param, enabled: enabled_param),
                 class: "pagination-link", "aria-label": "Goto page #{paginator.pages_count}" %>
           </li>
         <% end %>

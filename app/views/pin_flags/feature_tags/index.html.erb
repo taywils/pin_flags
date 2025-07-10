@@ -87,7 +87,8 @@
 
   <% if @feature_tags.any? %>
     <%= turbo_frame_tag :feature_tags_table do %>
-      <%= render 'feature_tags_table', feature_tags: @feature_tags, paginator: @paginator %>
+      <%= render 'feature_tags_table', feature_tags: @feature_tags, paginator: @paginator,
+          filter_param: @filter_param, enabled_param: @enabled_param %>
     <% end %>
   <% else %>
     <%= turbo_frame_tag :feature_tags_table do %>
