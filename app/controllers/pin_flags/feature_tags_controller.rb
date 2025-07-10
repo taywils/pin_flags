@@ -4,19 +4,30 @@ module PinFlags
 
     before_action :set_filter_param, only: %i[index show]
     before_action :set_enabled_param, only: %i[index show]
+    before_action :set_current_page, only: %i[index show]
     before_action :set_feature_taggable_type, only: %i[show]
     before_action :set_feature_tag, only: %i[show update destroy]
 
-    PER_PAGE ||= 10
+    PER_PAGE ||= 20
 
-    # TODO: Add pagination support
     def index
-      @feature_tags = fetch_feature_tags
+      @paginator = PinFlags::Page.new(fetch_feature_tags, page: @current_page, page_size: PER_PAGE)
+      @feature_tags = @paginator.records
+
+      # Handle overflow (when page number is too high)
+      if @paginator.index > @paginator.pages_count && @paginator.pages_count&.positive?
+        redirect_to feature_tags_path(search: @filter_param, enabled: @enabled_param)
+      end
     end
 
-    # TODO: Add pagination support
     def show
-      @feature_subscriptions = fetch_feature_subscriptions
+      @paginator = PinFlags::Page.new(fetch_feature_subscriptions, page: @current_page, page_size: PER_PAGE)
+      @feature_subscriptions = @paginator.records
+
+      # Handle overflow for feature subscriptions
+      if @paginator.index > @paginator.pages_count && @paginator.pages_count&.positive?
+        redirect_to feature_tag_path(@feature_tag, feature_taggable_type: @feature_taggable_type, filter: @filter_param)
+      end
     end
 
     def new
@@ -48,6 +59,10 @@ module PinFlags
     end
 
     private
+
+    def set_current_page
+      @current_page = params.fetch(:page, 1).to_i
+    end
 
     def set_feature_tag
       @feature_tag = PinFlags::FeatureTag.find(params[:id])
