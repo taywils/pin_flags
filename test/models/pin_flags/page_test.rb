@@ -4,7 +4,7 @@ class PinFlags::PageTest < ActiveSupport::TestCase
   def setup
     # Clean up any existing records first
     PinFlags::FeatureTag.destroy_all
-    
+
     # Create some test records
     5.times do |i|
       PinFlags::FeatureTag.create!(
@@ -12,7 +12,7 @@ class PinFlags::PageTest < ActiveSupport::TestCase
         enabled: true
       )
     end
-    
+
     # Set relation after creating records
     @relation = PinFlags::FeatureTag.all
   end
