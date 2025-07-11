@@ -4,6 +4,7 @@ module PinFlags
 
     before_action :set_filter_param, only: %i[index show]
     before_action :set_enabled_param, only: %i[index show]
+    # TODO: Add a :set_subscriptions_param, only: %i[index]
     before_action :set_current_page, only: %i[index show]
     before_action :set_feature_taggable_type, only: %i[show]
     before_action :set_feature_tag, only: %i[show update destroy]

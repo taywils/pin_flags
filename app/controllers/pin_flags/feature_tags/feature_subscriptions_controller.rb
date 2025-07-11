@@ -132,6 +132,7 @@ module PinFlags
         render :new, status: :unprocessable_content
       end
 
+      # TODO: Refactor to DRY up the code that is the same as in the FeatureTagsController
       def fetch_filtered_feature_subscriptions
         feature_subscriptions = @feature_tag.feature_subscriptions.order(created_at: :desc)
 
