@@ -8,7 +8,7 @@ module PinFlags
     before_action :set_feature_taggable_type, only: %i[show]
     before_action :set_feature_tag, only: %i[show update destroy]
 
-    PER_PAGE ||= 15
+    PER_PAGE ||= 10
 
     def index
       @paginator = PinFlags::Page.new(fetch_feature_tags, page: @current_page, page_size: PER_PAGE)

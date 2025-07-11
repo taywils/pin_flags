@@ -3,5 +3,8 @@
 <% end %>
 
 <%= turbo_stream.update :feature_subscriptions_table do %>
-  <%= render 'pin_flags/feature_tags/feature_subscriptions/feature_subscriptions_table', feature_tag: @feature_tag, feature_subscriptions: @feature_tag.feature_subscriptions %>
+  <%= render 'pin_flags/feature_tags/feature_subscriptions/feature_subscriptions_table',
+      feature_tag: @feature_tag, feature_subscriptions: @feature_subscriptions, paginator: @paginator,
+      filter_param: @filter_param, feature_taggable_type: @feature_taggable_type
+  %>
 <% end %>

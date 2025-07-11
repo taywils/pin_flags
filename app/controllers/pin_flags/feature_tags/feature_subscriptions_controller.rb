@@ -4,6 +4,9 @@ module PinFlags
       rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
       before_action :set_feature_tag
+      before_action :set_current_page, only: %i[create destroy]
+      before_action :set_filter_param, only: %i[create destroy]
+      before_action :set_feature_taggable_type, only: %i[create destroy]
       before_action :set_feature_subscription, only: %i[destroy]
 
       def new
@@ -13,6 +16,7 @@ module PinFlags
       def create
         if feature_subscription_params[:bulk_upload] == "1"
           # TODO: Move this logic into a ActiveModel PORO for better separation of concerns
+          # TODO: Change the logic to use upsert_all or similar for performance
           create_feature_subscriptions_in_bulk
         else
           create_single_feature_subscription
@@ -35,6 +39,18 @@ module PinFlags
         raise ActiveRecord::RecordNotFound if @feature_tag.blank?
       end
 
+      def set_current_page
+        @current_page = params.fetch(:page, 1).to_i
+      end
+
+      def set_filter_param
+        @filter_param = params.fetch(:filter, nil)
+      end
+
+      def set_feature_taggable_type
+        @feature_taggable_type = params.fetch(:feature_taggable_type, nil)
+      end
+
       def feature_subscription_params
         params.expect(feature_subscription: [ :feature_taggable_type, :feature_taggable_id, :bulk_upload ])
       end
@@ -53,8 +69,12 @@ module PinFlags
         @feature_subscription = @feature_tag.feature_subscriptions.new(feature_subscription_params.except(:bulk_upload))
 
         if @feature_subscription.save
+          filtered_subscriptions = fetch_filtered_feature_subscriptions
+          @paginator = PinFlags::Page.new(filtered_subscriptions, page: @current_page, page_size: PinFlags::FeatureTagsController::PER_PAGE)
+          @feature_subscriptions = @paginator.records
+
           respond_to do |format|
-            format.html { redirect_to @feature_tag, notice: "Feature Subscription was successfully created." }
+            format.html { redirect_to pin_flags.feature_tag_path(@feature_tag, filter: @filter_param, feature_taggable_type: @feature_taggable_type), notice: "Feature Subscription was successfully created." }
             format.turbo_stream
           end
         else
@@ -95,7 +115,7 @@ module PinFlags
       def handle_feature_subscriptions_in_bulk_success
         respond_to do |format|
           format.html do
-            redirect_to @feature_tag, notice: "Feature Subscriptions were successfully created."
+            redirect_to pin_flags.feature_tag_path(@feature_tag, filter: @filter_param, feature_taggable_type: @feature_taggable_type), notice: "Feature Subscriptions were successfully created."
           end
           format.turbo_stream
         end
@@ -110,6 +130,20 @@ module PinFlags
         )
         @feature_subscription.errors.add(:feature_taggable_id, alert_message)
         render :new, status: :unprocessable_content
+      end
+
+      def fetch_filtered_feature_subscriptions
+        feature_subscriptions = @feature_tag.feature_subscriptions.order(created_at: :desc)
+
+        if @feature_taggable_type.present?
+          feature_subscriptions = feature_subscriptions.where(feature_taggable_type: @feature_taggable_type)
+        end
+
+        if @filter_param.present?
+          feature_subscriptions = feature_subscriptions.where(feature_taggable_id: @filter_param.strip)
+        end
+
+        feature_subscriptions
       end
     end
   end

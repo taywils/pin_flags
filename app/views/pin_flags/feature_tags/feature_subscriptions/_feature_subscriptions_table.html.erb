@@ -1,4 +1,4 @@
-<%# locals: (feature_tag:, feature_subscriptions:) %>
+<%# locals: (feature_tag:, paginator:, feature_subscriptions:, filter_param: nil, feature_taggable_type: nil) %>
 
 <section class="mt-6">
   <div class="table-container">
@@ -25,4 +25,59 @@
       </tfoot>
     </table>
   </div>
+
+  <% if paginator.pages_count && paginator.pages_count > 1 %>
+    <nav class="pagination mt-4" role="navigation" aria-label="pagination">
+      <% unless paginator.first? %>
+        <%= link_to "Previous", pin_flags.feature_tag_path(feature_tag, page: paginator.previous_index, filter: filter_param, feature_taggable_type: feature_taggable_type),
+            class: "pagination-previous" %>
+      <% end %>
+
+      <% unless paginator.last? %>
+        <%= link_to "Next page", pin_flags.feature_tag_path(feature_tag, page: paginator.next_index, filter: filter_param, feature_taggable_type: feature_taggable_type),
+            class: "pagination-next" %>
+      <% end %>
+
+      <ul class="pagination-list">
+        <% if paginator.index > 3 %>
+          <li>
+            <%= link_to "1", pin_flags.feature_tag_path(feature_tag, page: 1, filter: filter_param, feature_taggable_type: feature_taggable_type),
+                class: "pagination-link", "aria-label": "Goto page 1" %>
+          </li>
+          <% if paginator.index > 4 %>
+            <li>
+              <span class="pagination-ellipsis">&hellip;</span>
+            </li>
+          <% end %>
+        <% end %>
+
+        <% start_page = [paginator.index - 2, 1].max %>
+        <% end_page = [paginator.index + 2, paginator.pages_count].min %>
+        <% (start_page..end_page).each do |page| %>
+          <li>
+            <% if page == paginator.index %>
+              <span class="pagination-link is-current" aria-label="Page <%= page %>" aria-current="page">
+                <%= page %>
+              </span>
+            <% else %>
+              <%= link_to page, pin_flags.feature_tag_path(feature_tag, page: page, filter: filter_param, feature_taggable_type: feature_taggable_type),
+                  class: "pagination-link", "aria-label": "Goto page #{page}" %>
+            <% end %>
+          </li>
+        <% end %>
+
+        <% if paginator.index < paginator.pages_count - 2 %>
+          <% if paginator.index < paginator.pages_count - 3 %>
+            <li>
+              <span class="pagination-ellipsis">&hellip;</span>
+            </li>
+          <% end %>
+          <li>
+            <%= link_to paginator.pages_count, pin_flags.feature_tag_path(feature_tag, page: paginator.pages_count, filter: filter_param, feature_taggable_type: feature_taggable_type),
+                class: "pagination-link", "aria-label": "Goto page #{paginator.pages_count}" %>
+          </li>
+        <% end %>
+      </ul>
+    </nav>
+  <% end %>
 </section>

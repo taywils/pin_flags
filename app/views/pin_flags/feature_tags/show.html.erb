@@ -58,7 +58,7 @@
                   placeholder: "Filter feature subscription by ID...", 
                   autocomplete: "off", 
                   autofocus: true,
-                  value: @search_param || "", 
+                  value: @filter_param || "",
                   maxlength: PinFlags::FeatureTag::MAX_NAME_LENGTH, 
                   pattern: "[^\s]+.*",
                   data: {
@@ -77,7 +77,8 @@
     <% if @feature_subscriptions.any? %>
       <%= turbo_frame_tag :feature_subscriptions_table do %>
         <%= render "pin_flags/feature_tags/feature_subscriptions/feature_subscriptions_table",
-            feature_tag: @feature_tag, feature_subscriptions: @feature_subscriptions
+            feature_tag: @feature_tag, feature_subscriptions: @feature_subscriptions, paginator: @paginator,
+            filter_param: @filter_param, feature_taggable_type: @feature_taggable_type
         %>
       <% end %>
     <% else %>
