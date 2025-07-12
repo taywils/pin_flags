@@ -10,6 +10,7 @@ module PinFlags
       message: "already has this feature tag applied"
     }
 
+    # TODO: Move this code into a PORO, PinFlags::FeatureSubscription::BulkProcessor
     def self.create_in_bulk(feature_tag:, feature_taggable_type:, feature_taggable_ids:)
       feature_taggable_ids = feature_taggable_ids.map(&:strip)
 
@@ -20,6 +21,7 @@ module PinFlags
         return false
       end
 
+      # TODO: Change the logic to use upsert_all in batch for performance
       ActiveRecord::Base.transaction do
         feature_taggable_ids.each do |feature_taggable_id|
           feature_tag.feature_subscriptions.find_or_create_by!(

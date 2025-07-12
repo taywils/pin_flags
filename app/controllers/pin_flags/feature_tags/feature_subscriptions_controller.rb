@@ -15,8 +15,6 @@ module PinFlags
 
       def create
         if feature_subscription_params[:bulk_upload] == "1"
-          # TODO: Move this logic into a ActiveModel PORO for better separation of concerns
-          # TODO: Change the logic to use upsert_all or similar for performance
           create_feature_subscriptions_in_bulk
         else
           create_single_feature_subscription
