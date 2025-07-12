@@ -16,24 +16,38 @@ module PinFlags
 
       # Validate that the feature_taggable_type is a valid class
       begin
-        feature_taggable_type.constantize
+        klass = feature_taggable_type.constantize
       rescue NameError
         return false
       end
 
-      # TODO: Change the logic to use upsert_all in batch for performance
-      ActiveRecord::Base.transaction do
-        feature_taggable_ids.each do |feature_taggable_id|
-          feature_tag.feature_subscriptions.find_or_create_by!(
-            feature_taggable_type: feature_taggable_type,
-            feature_taggable_id: feature_taggable_id
-          )
-        rescue ActiveRecord::RecordInvalid, ActiveRecord::StatementInvalid => _e
-          raise ActiveRecord::Rollback
-        end
-        return true
+      # Validate that all feature_taggable_ids exist in the database
+      existing_ids = klass.where(id: feature_taggable_ids).pluck(:id).map(&:to_s)
+      invalid_ids = feature_taggable_ids - existing_ids
+
+      return false if invalid_ids.any?
+
+      # Prepare records for upsert_all
+      records = feature_taggable_ids.map do |feature_taggable_id|
+        {
+          feature_tag_id: feature_tag.id,
+          feature_taggable_type: feature_taggable_type,
+          feature_taggable_id: feature_taggable_id,
+          created_at: Time.current,
+          updated_at: Time.current
+        }
       end
-      false
+
+      begin
+        # Use upsert_all to insert or update records in bulk
+        PinFlags::FeatureSubscription.upsert_all(
+          records,
+          unique_by: [ :feature_tag_id, :feature_taggable_type, :feature_taggable_id ]
+        )
+        true
+      rescue ActiveRecord::RecordInvalid, ActiveRecord::StatementInvalid => _e
+        false
+      end
     end
   end
 end

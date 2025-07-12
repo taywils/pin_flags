@@ -307,5 +307,43 @@ module PinFlags
       # Verify no subscriptions were created
       assert_equal initial_count, PinFlags::FeatureSubscription.count
     end
+
+    test "create_in_bulk returns false for non-existent feature_taggable_ids" do
+      user1 = TestUser.create!(name: "User 1", email: "user1@example.com")
+
+      # Mix valid and invalid IDs
+      valid_id = user1.id.to_s
+      invalid_id = "99999" # ID that doesn't exist
+      user_ids = [ valid_id, invalid_id ]
+
+      initial_count = PinFlags::FeatureSubscription.count
+
+      result = PinFlags::FeatureSubscription.create_in_bulk(
+        feature_tag: @feature_tag,
+        feature_taggable_type: "PinFlags::FeatureSubscriptionTest::TestUser",
+        feature_taggable_ids: user_ids
+      )
+
+      refute result
+      # Verify no subscriptions were created when invalid IDs are present
+      assert_equal initial_count, PinFlags::FeatureSubscription.count
+    end
+
+    test "create_in_bulk returns false for all non-existent feature_taggable_ids" do
+      # Use only invalid IDs
+      invalid_ids = [ "99999", "88888" ]
+
+      initial_count = PinFlags::FeatureSubscription.count
+
+      result = PinFlags::FeatureSubscription.create_in_bulk(
+        feature_tag: @feature_tag,
+        feature_taggable_type: "PinFlags::FeatureSubscriptionTest::TestUser",
+        feature_taggable_ids: invalid_ids
+      )
+
+      refute result
+      # Verify no subscriptions were created
+      assert_equal initial_count, PinFlags::FeatureSubscription.count
+    end
   end
 end
