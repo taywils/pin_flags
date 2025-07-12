@@ -41,7 +41,7 @@ module PinFlags
 
     # Association tests
     test "has valid attributes when feature_taggable is set" do
-      subscription = FeatureSubscription.new(
+      subscription = PinFlags::FeatureSubscription.new(
         feature_tag: @feature_tag,
         feature_taggable: @user
       )
@@ -49,33 +49,33 @@ module PinFlags
     end
 
     test "is invalid when feature_taggable polymorphic association is not set" do
-      subscription = FeatureSubscription.new(
+      subscription = PinFlags::FeatureSubscription.new(
         feature_tag: @feature_tag
       )
       refute subscription.valid?
     end
 
     test "is invalid when feature_tag is not set" do
-      subscription = FeatureSubscription.new(
+      subscription = PinFlags::FeatureSubscription.new(
         feature_taggable: @user
       )
       refute subscription.valid?
     end
 
     test "is invalid when both associations are not set" do
-      subscription = FeatureSubscription.new
+      subscription = PinFlags::FeatureSubscription.new
       refute subscription.valid?
     end
 
     test "validates uniqueness of feature_taggable_id scoped to feature_tag_id and feature_taggable_type" do
       # Create first subscription
-      FeatureSubscription.create!(
+      PinFlags::FeatureSubscription.create!(
         feature_tag: @feature_tag,
         feature_taggable: @user
       )
 
       # Try to create duplicate
-      duplicate_subscription = FeatureSubscription.new(
+      duplicate_subscription = PinFlags::FeatureSubscription.new(
         feature_tag: @feature_tag,
         feature_taggable: @user
       )
@@ -91,7 +91,7 @@ module PinFlags
       @user.feature_tag_pin(@feature_tag.name)
 
       # Verify the subscription was created
-      subscription = FeatureSubscription.find_by(
+      subscription = PinFlags::FeatureSubscription.find_by(
         feature_tag: @feature_tag,
         feature_taggable: @user
       )
@@ -102,7 +102,7 @@ module PinFlags
     end
 
     test "polymorphic association sets correct type and id" do
-      subscription = FeatureSubscription.create!(
+      subscription = PinFlags::FeatureSubscription.create!(
         feature_tag: @feature_tag,
         feature_taggable: @user
       )
@@ -114,7 +114,7 @@ module PinFlags
 
     # Test table name
     test "uses correct table name" do
-      assert_equal "pin_flags_feature_subscriptions", FeatureSubscription.table_name
+      assert_equal "pin_flags_feature_subscriptions", PinFlags::FeatureSubscription.table_name
     end
 
     test "feature_tag_unpin removes feature tag" do
@@ -154,6 +154,158 @@ module PinFlags
 
       # Should still only have one subscription after the failed attempt
       assert_equal 1, @user.feature_subscriptions.count
+    end
+
+    # Test create_in_bulk method
+    test "create_in_bulk creates multiple subscriptions successfully" do
+      user1 = TestUser.create!(name: "User 1", email: "user1@example.com")
+      user2 = TestUser.create!(name: "User 2", email: "user2@example.com")
+      user3 = TestUser.create!(name: "User 3", email: "user3@example.com")
+
+      user_ids = [ user1.id.to_s, user2.id.to_s, user3.id.to_s ]
+
+      result = PinFlags::FeatureSubscription.create_in_bulk(
+        feature_tag: @feature_tag,
+        feature_taggable_type: "PinFlags::FeatureSubscriptionTest::TestUser",
+        feature_taggable_ids: user_ids
+      )
+
+      assert result
+      assert_equal 3, @feature_tag.feature_subscriptions.count
+      assert_equal 3, PinFlags::FeatureSubscription.where(feature_tag: @feature_tag).count
+
+      # Verify each subscription was created correctly
+      [ user1, user2, user3 ].each do |user|
+        subscription = PinFlags::FeatureSubscription.find_by(
+          feature_tag: @feature_tag,
+          feature_taggable: user
+        )
+        assert_not_nil subscription
+        assert_equal @feature_tag, subscription.feature_tag
+        assert_equal user, subscription.feature_taggable
+      end
+    end
+
+    test "create_in_bulk handles whitespace in IDs" do
+      user1 = TestUser.create!(name: "User 1", email: "user1@example.com")
+      user2 = TestUser.create!(name: "User 2", email: "user2@example.com")
+
+      # Include whitespace in the IDs
+      user_ids = [ " #{user1.id} ", "\t#{user2.id}\n" ]
+
+      result = PinFlags::FeatureSubscription.create_in_bulk(
+        feature_tag: @feature_tag,
+        feature_taggable_type: "PinFlags::FeatureSubscriptionTest::TestUser",
+        feature_taggable_ids: user_ids
+      )
+
+      assert result
+      assert_equal 2, @feature_tag.feature_subscriptions.count
+
+      # Verify subscriptions were created with correct IDs (whitespace stripped)
+      [ user1, user2 ].each do |user|
+        subscription = PinFlags::FeatureSubscription.find_by(
+          feature_tag: @feature_tag,
+          feature_taggable: user
+        )
+        assert_not_nil subscription
+      end
+    end
+
+    test "create_in_bulk creates existing subscriptions without error (find_or_create_by)" do
+      user1 = TestUser.create!(name: "User 1", email: "user1@example.com")
+      user2 = TestUser.create!(name: "User 2", email: "user2@example.com")
+
+      # Create one subscription manually first
+      existing_subscription = PinFlags::FeatureSubscription.create!(
+        feature_tag: @feature_tag,
+        feature_taggable: user1
+      )
+
+      user_ids = [ user1.id.to_s, user2.id.to_s ]
+
+      result = PinFlags::FeatureSubscription.create_in_bulk(
+        feature_tag: @feature_tag,
+        feature_taggable_type: "PinFlags::FeatureSubscriptionTest::TestUser",
+        feature_taggable_ids: user_ids
+      )
+
+      assert result
+      assert_equal 2, @feature_tag.feature_subscriptions.count
+
+      # Verify the existing subscription is still there
+      assert_equal existing_subscription, PinFlags::FeatureSubscription.find_by(
+        feature_tag: @feature_tag,
+        feature_taggable: user1
+      )
+
+      # Verify the new subscription was created
+      assert_not_nil PinFlags::FeatureSubscription.find_by(
+        feature_tag: @feature_tag,
+        feature_taggable: user2
+      )
+    end
+
+    test "create_in_bulk returns false and rolls back transaction on error" do
+      user1 = TestUser.create!(name: "User 1", email: "user1@example.com")
+
+      # Use an invalid feature_taggable_type to trigger an error
+      invalid_type = "NonExistentClass"
+      user_ids = [ user1.id.to_s ]
+
+      initial_count = PinFlags::FeatureSubscription.count
+
+      result = PinFlags::FeatureSubscription.create_in_bulk(
+        feature_tag: @feature_tag,
+        feature_taggable_type: invalid_type,
+        feature_taggable_ids: user_ids
+      )
+
+      assert_not result
+      # Verify no subscriptions were created due to rollback
+      assert_equal initial_count, PinFlags::FeatureSubscription.count
+    end
+
+    test "create_in_bulk returns false for invalid feature_taggable_type" do
+      user1 = TestUser.create!(name: "User 1", email: "user1@example.com")
+
+      # Use an invalid feature_taggable_type
+      invalid_type = "NonExistentClass"
+      user_ids = [ user1.id.to_s ]
+
+      initial_count = PinFlags::FeatureSubscription.count
+
+      # Should return false without raising an error
+      result = PinFlags::FeatureSubscription.create_in_bulk(
+        feature_tag: @feature_tag,
+        feature_taggable_type: invalid_type,
+        feature_taggable_ids: user_ids
+      )
+
+      assert_not result
+      # Verify no subscriptions were created
+      assert_equal initial_count, PinFlags::FeatureSubscription.count
+    end
+
+    test "create_in_bulk returns false for invalid namespaced feature_taggable_type" do
+      user1 = TestUser.create!(name: "User 1", email: "user1@example.com")
+
+      # Use an invalid namespaced feature_taggable_type
+      invalid_type = "SomeModule::NonExistentClass"
+      user_ids = [ user1.id.to_s ]
+
+      initial_count = PinFlags::FeatureSubscription.count
+
+      # Should return false without raising an error
+      result = PinFlags::FeatureSubscription.create_in_bulk(
+        feature_tag: @feature_tag,
+        feature_taggable_type: invalid_type,
+        feature_taggable_ids: user_ids
+      )
+
+      assert_not result
+      # Verify no subscriptions were created
+      assert_equal initial_count, PinFlags::FeatureSubscription.count
     end
   end
 end

@@ -69,9 +69,7 @@ module PinFlags
         @feature_subscription = @feature_tag.feature_subscriptions.new(feature_subscription_params.except(:bulk_upload))
 
         if @feature_subscription.save
-          filtered_subscriptions = fetch_filtered_feature_subscriptions
-          @paginator = PinFlags::Page.new(filtered_subscriptions, page: @current_page, page_size: PinFlags::FeatureTagsController::PER_PAGE)
-          @feature_subscriptions = @paginator.records
+          set_paginated_feature_subscriptions
 
           respond_to do |format|
             format.html { redirect_to pin_flags.feature_tag_path(@feature_tag, filter: @filter_param, feature_taggable_type: @feature_taggable_type), notice: "Feature Subscription was successfully created." }
@@ -83,36 +81,22 @@ module PinFlags
       end
 
       def create_feature_subscriptions_in_bulk
-        feature_taggable_ids = feature_subscription_params[:feature_taggable_id].split(",").map(&:strip)
+        feature_taggable_ids = feature_subscription_params[:feature_taggable_id].split(",")
 
-        if process_bulk_transaction(feature_taggable_ids)
+        if PinFlags::FeatureSubscription.create_in_bulk(
+          feature_tag: @feature_tag,
+          feature_taggable_type: feature_subscription_params[:feature_taggable_type],
+          feature_taggable_ids: feature_taggable_ids
+        )
           handle_feature_subscriptions_in_bulk_success
         else
           handle_feature_subscriptions_in_bulk_failure
         end
       end
 
-      def process_bulk_transaction(feature_taggable_ids)
-        ActiveRecord::Base.transaction do
-          process_feature_taggable_ids(feature_taggable_ids)
-        rescue ActiveRecord::Rollback
-          return false
-        end
-        true
-      end
-
-      def process_feature_taggable_ids(feature_taggable_ids)
-        feature_taggable_ids.each do |feature_taggable_id|
-          @feature_tag.feature_subscriptions.find_or_create_by!(
-            feature_taggable_type: feature_subscription_params[:feature_taggable_type],
-            feature_taggable_id: feature_taggable_id
-          )
-        rescue ActiveRecord::RecordInvalid, ActiveRecord::StatementInvalid => _e
-          raise ActiveRecord::Rollback
-        end
-      end
-
       def handle_feature_subscriptions_in_bulk_success
+        set_paginated_feature_subscriptions
+
         respond_to do |format|
           format.html do
             redirect_to pin_flags.feature_tag_path(@feature_tag, filter: @filter_param, feature_taggable_type: @feature_taggable_type), notice: "Feature Subscriptions were successfully created."
@@ -132,7 +116,6 @@ module PinFlags
         render :new, status: :unprocessable_content
       end
 
-      # TODO: Refactor to DRY up the code that is the same as in the FeatureTagsController
       def fetch_filtered_feature_subscriptions
         feature_subscriptions = @feature_tag.feature_subscriptions.order(created_at: :desc)
 
@@ -145,6 +128,12 @@ module PinFlags
         end
 
         feature_subscriptions
+      end
+
+      def set_paginated_feature_subscriptions
+        filtered_subscriptions = fetch_filtered_feature_subscriptions
+        @paginator = PinFlags::Page.new(filtered_subscriptions, page: @current_page, page_size: PinFlags::FeatureTagsController::PER_PAGE)
+        @feature_subscriptions = @paginator.records
       end
     end
   end
