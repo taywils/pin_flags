@@ -65,7 +65,7 @@
             %>
       </div>
       <div class="column">
-        <div class="select is-medium">
+        <div class="select is-medium mr-3">
           <%= form.select :enabled, 
               options_for_select([
                 ['Enabled?', ''],
@@ -81,8 +81,6 @@
               }
           %>
         </div>
-      </div>
-      <div class="column">
         <div class="select is-medium">
           <%= form.select :subscriptions, 
               options_for_select([
