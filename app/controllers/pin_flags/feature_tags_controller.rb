@@ -4,7 +4,7 @@ module PinFlags
 
     before_action :set_filter_param, only: %i[index show]
     before_action :set_enabled_param, only: %i[index show]
-    # TODO: Add a :set_subscriptions_param, only: %i[index]
+    before_action :set_subscriptions_param, only: %i[index]
     before_action :set_current_page, only: %i[index show]
     before_action :set_feature_taggable_type, only: %i[show]
     before_action :set_feature_tag, only: %i[show update destroy]
@@ -17,7 +17,7 @@ module PinFlags
 
       # Handle overflow (when page number is too high)
       if @paginator.index > @paginator.pages_count && @paginator.pages_count&.positive?
-        redirect_to feature_tags_path(search: @filter_param, enabled: @enabled_param)
+        redirect_to feature_tags_path(search: @filter_param, enabled: @enabled_param, subscriptions: @subscriptions_param)
       end
     end
 
@@ -81,6 +81,10 @@ module PinFlags
       @enabled_param = params.fetch(:enabled, nil)
     end
 
+    def set_subscriptions_param
+      @subscriptions_param = params.fetch(:subscriptions, nil)
+    end
+
     def set_feature_taggable_type
       @feature_taggable_type = params.fetch(:feature_taggable_type, nil)
     end
@@ -89,6 +93,7 @@ module PinFlags
       scope = FeatureTag.all.includes(:feature_subscriptions).order(created_at: :desc)
       scope = scope.with_name_like(@filter_param) if @filter_param.present?
       scope = filter_by_enabled_status(scope) if @enabled_param.present?
+      scope = filter_by_subscriptions_status(scope) if @subscriptions_param.present?
       scope
     end
 
@@ -110,6 +115,11 @@ module PinFlags
     def filter_by_enabled_status(scope)
       enabled = ActiveModel::Type::Boolean.new.cast(@enabled_param)
       enabled ? scope.enabled : scope.disabled
+    end
+
+    def filter_by_subscriptions_status(scope)
+      has_subscriptions = ActiveModel::Type::Boolean.new.cast(@subscriptions_param)
+      has_subscriptions ? scope.joins(:feature_subscriptions).distinct : scope.left_joins(:feature_subscriptions).where(feature_subscriptions: { id: nil })
     end
 
     def handle_success(action)

@@ -82,17 +82,35 @@
           %>
         </div>
       </div>
+      <div class="column">
+        <div class="select is-medium">
+          <%= form.select :subscriptions, 
+              options_for_select([
+                ['Subscriptions?', ''],
+                ['Has Subscriptions', 'true'],
+                ['No Subscriptions', 'false']
+              ], params[:subscriptions]), 
+              {}, 
+              {
+                aria: { label: "Filter by subscriptions status" },
+                data: {
+                  action: "change->pin-flags-submit-debounce#activate"
+                }
+              }
+          %>
+        </div>
+      </div>
     </div>
   <% end %>
 
   <% if @feature_tags.any? %>
     <%= turbo_frame_tag :feature_tags_table do %>
       <%= render 'feature_tags_table', feature_tags: @feature_tags, paginator: @paginator,
-          filter_param: @filter_param, enabled_param: @enabled_param %>
+          filter_param: @filter_param, enabled_param: @enabled_param, subscriptions_param: @subscriptions_param %>
     <% end %>
   <% else %>
     <%= turbo_frame_tag :feature_tags_table do %>
-      <%= render 'empty_feature_tags_table', filter_param: @filter_param, enabled_param: @enabled_param %>
+      <%= render 'empty_feature_tags_table', filter_param: @filter_param, enabled_param: @enabled_param, subscriptions_param: @subscriptions_param %>
     <% end %>
   <% end %>
 </div>
