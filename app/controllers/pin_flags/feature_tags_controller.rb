@@ -2,10 +2,10 @@ module PinFlags
   class FeatureTagsController < ApplicationController
     rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
 
-    before_action :set_filter_param, only: %i[index show]
-    before_action :set_enabled_param, only: %i[index show]
-    before_action :set_subscriptions_param, only: %i[index]
-    before_action :set_current_page, only: %i[index show]
+    before_action :set_filter_param, only: %i[index show create]
+    before_action :set_enabled_param, only: %i[index show create]
+    before_action :set_subscriptions_param, only: %i[index create]
+    before_action :set_current_page, only: %i[index show create]
     before_action :set_feature_taggable_type, only: %i[show]
     before_action :set_feature_tag, only: %i[show update destroy]
 
@@ -40,6 +40,8 @@ module PinFlags
 
       if @feature_tag.save
         @feature_tags = fetch_feature_tags
+        @paginator = PinFlags::Page.new(@feature_tags, page: @current_page, page_size: PER_PAGE)
+        @feature_tags = @paginator.records
         handle_success(:create)
       else
         render :new, status: :unprocessable_content

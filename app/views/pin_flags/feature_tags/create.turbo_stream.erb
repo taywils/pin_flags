@@ -3,5 +3,5 @@
 <% end %>
 
 <%= turbo_stream.update :feature_tags_table do %>
-  <%= render 'feature_tags_table', feature_tags: @feature_tags %>
+  <%= render 'feature_tags_table', feature_tags: @feature_tags, paginator: @paginator %>
 <% end %>

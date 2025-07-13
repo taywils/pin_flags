@@ -12,6 +12,8 @@
     
     <!-- Use host app's JavaScript (Turbo + Stimulus) -->
     <%= javascript_importmap_tags %>
+
+    <%= javascript_include_tag "pin_flags/alpine.min", defer: true %>
   </head>
   <body>
     <section class="section">
