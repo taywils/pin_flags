@@ -10,10 +10,6 @@ module PinFlags
         migration_template "create_feature_subscriptions.rb", "db/migrate/create_feature_subscriptions.rb"
       end
 
-      def copy_stimulus_controllers
-        copy_file "stimulus/pin_flags_submit_debounce_controller.js", "app/javascript/controllers/pin_flags_submit_debounce_controller.js"
-      end
-
       def self.next_migration_number(dirname)
         # Increment by 1 second each time to ensure unique timestamps
         @migration_number ||= Time.current.utc.strftime("%Y%m%d%H%M%S").to_i

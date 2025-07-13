@@ -28,8 +28,9 @@
     <hr class="has-background-warning" style="height: 2px; width: 50%;">
   </div>
 
-  <section>
-    <%= form_with url: pin_flags.feature_tag_path(@feature_tag), method: :get, data: { turbo_frame: :feature_subscriptions_table, controller: 'pin-flags-submit-debounce', pin_flags_submit_debounce_target: 'form' } do |form| %>
+  <section x-data="{ timeout: null, delay: 500 }">
+    <%= form_with url: pin_flags.feature_tag_path(@feature_tag), method: :get, 
+        data: { turbo_frame: :feature_subscriptions_table } do |form| %>
       <div class="columns">
         <div class="column is-half">
           <div class="field mb-4">
@@ -43,9 +44,7 @@
                       selected: @feature_taggable_type,
                       include_blank: @feature_taggable_type.present?
                     },
-                    data: {
-                      action: 'pin-flags-submit-debounce#activate'
-                    }
+                    "@change": "clearTimeout(timeout); timeout = setTimeout(() => { $el.closest('form').requestSubmit() }, delay)"
                 %>
               </div>
             </div>
@@ -61,9 +60,7 @@
                   value: @filter_param || "",
                   maxlength: PinFlags::FeatureTag::MAX_NAME_LENGTH, 
                   pattern: "[^\s]+.*",
-                  data: {
-                    action: 'pin-flags-submit-debounce#activate'
-                  }
+                  "@input": "clearTimeout(timeout); timeout = setTimeout(() => { $el.closest('form').requestSubmit() }, delay)"
               %>
             </div>
           </div>
