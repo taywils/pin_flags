@@ -24,12 +24,12 @@
             </div>
           </div>
 
-          <section data-controller="pin-flags-new-feature-subscriptions-form">
+          <section x-data="{ bulkUpload: false }">
             <div class="field mb-4">
               <%= form.label :bulk_upload, 'Bulk Upload?', class: 'label' %>
               <div class="control">
                 <%= form.check_box :bulk_upload, class: 'checkbox',
-                    data: { action: "pin-flags-new-feature-subscriptions-form#toggle"}
+                    "@change": "bulkUpload = $el.checked"
                 %>
               </div>
             </div>
@@ -42,30 +42,30 @@
               <p class="help is-info mb-2">
                 Must be a valid <strong>"id"</strong> column value for the feature taggable type in the database.
               </p>
-              <div class="control" data-pin-flags-new-feature-subscriptions-form-target="container">
+              <div class="control" x-html="bulkUpload ? $refs.textareaTemplate.innerHTML : $refs.textTemplate.innerHTML">
+                <!-- This div will be populated by Alpine -->
+              </div>
+            </div>
+
+            <!-- Templates -->
+            <template x-ref="textTemplate">
+              <div>
                 <%= form.text_field :feature_taggable_id, class: "input",
                     required: true, autofocus: false, autocomplete: "off",
                     placeholder: "Enter a single Feature Taggable ID."
                 %>
               </div>
+            </template>
 
-              <!-- templates for pin-flags-new-feature-subscriptions-form -->
-              <template data-pin-flags-new-feature-subscriptions-form-target="textTemplate">
-                <%= form.text_field :feature_taggable_id, class: "input",
-                    required: true, autofocus: false, autocomplete: "off",
-                    placeholder: "Enter a single Feature Taggable ID."
-                %>
-              </template>
-
-              <template data-pin-flags-new-feature-subscriptions-form-target="textareaTemplate">
+            <template x-ref="textareaTemplate">
+              <div>
                 <%= form.text_area :feature_taggable_id, class: "textarea",
                     required: true, autofocus: false, autocomplete: "off",
                     rows: 6,
                     placeholder: "Enter comma separated values for Feature Taggable IDs. All IDs must be for the same Feature Taggable Type."
                 %>
-              </template> 
-              <!-- end -->
-            </div>
+              </div>
+            </template>
           </section>
 
           <div class="field is-grouped my-4">
