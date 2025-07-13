@@ -9,9 +9,11 @@
   <td>
     <%= form_with model: feature_tag, url: pin_flags.feature_tag_path(feature_tag),
         method: :patch,
-        data: { controller: 'pin-flags-form-submit' },
         class: 'form-inline' do |f| %>
-      <%= f.check_box :enabled, class: 'checkbox', data: { action: 'change->pin-flags-form-submit#submit' } %>
+      <div x-data="{ timeout: null }">
+        <%= f.check_box :enabled, class: 'checkbox',
+            "@change": "clearTimeout(timeout); timeout = setTimeout(() => { $el.closest('form').requestSubmit() }, 500)" %>
+      </div>
     <% end %>
   </td>
   <td>
