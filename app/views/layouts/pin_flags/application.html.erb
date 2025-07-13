@@ -7,12 +7,14 @@
 
     <meta name="viewport" content="width=device-width,initial-scale=1">
 
+    <!-- bulma@1.0.4 -->
     <%= stylesheet_link_tag "pin_flags/bulma.min", preload: false %>
     <%= stylesheet_link_tag "pin_flags/application", "data-turbo-track": "reload" %>
-    
+
     <!-- Use host app's JavaScript (Turbo + Stimulus) -->
     <%= javascript_importmap_tags %>
 
+    <!-- alpinejs@3.14.8 -->
     <%= javascript_include_tag "pin_flags/alpine.min", defer: true %>
   </head>
   <body>
