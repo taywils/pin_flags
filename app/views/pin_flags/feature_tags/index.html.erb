@@ -25,9 +25,7 @@
       <div class="navbar-item">
         <div class="buttons">
           <button class="button is-primary is-dark"
-                  data-controller="pin-flags-js-modal-trigger" 
-                  data-action="pin-flags-js-modal-trigger#open"
-                  data-pin-flags-js-modal-trigger-modal-id-value="pin-flags-import-form-modal">
+                  @click="$dispatch('open-modal', { modalId: '<%= display_import_form_modal_id %>' })">
             Import
           </button>
           <%= link_to "Export", pin_flags.feature_tags_exports_path(format: :json),

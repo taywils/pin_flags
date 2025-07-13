@@ -1,16 +1,23 @@
 <%# locals: (modal_id:, title:, body_content: nil, footer_buttons: nil) %>
 
-<div class="modal" id="<%= modal_id %>">
-  <div class="modal-background" 
-       data-controller="pin-flags-js-modal-trigger"
-       data-action="click->pin-flags-js-modal-trigger#close"></div>
+<div class="modal" id="<%= modal_id %>" 
+     x-data="{ 
+       isOpen: false,
+       open() { this.isOpen = true },
+       close() { this.isOpen = false }
+     }"
+     x-show="isOpen"
+     x-cloak
+     @keydown.escape.window="close()"
+     @open-modal.window="if ($event.detail.modalId === '<%= modal_id %>') open()"
+     :class="{ 'is-active': isOpen }">
+  
+  <div class="modal-background" @click="close()"></div>
   
   <div class="modal-card">
     <header class="modal-card-head">
       <p class="modal-card-title"><%= title %></p>
-      <button class="delete" 
-              data-controller="pin-flags-js-modal-trigger"
-              data-action="click->pin-flags-js-modal-trigger#close"></button>
+      <button class="delete" @click="close()"></button>
     </header>
     
     <section class="modal-card-body">
@@ -25,9 +32,7 @@
       <% if footer_buttons %>
         <%= footer_buttons %>
       <% else %>
-        <button class="button" 
-                data-controller="pin-flags-js-modal-trigger"
-                data-action="click->pin-flags-js-modal-trigger#close">
+        <button class="button" @click="close()">
           Close
         </button>
       <% end %>
