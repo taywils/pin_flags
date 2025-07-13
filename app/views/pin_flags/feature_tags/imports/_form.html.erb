@@ -10,25 +10,46 @@
           <p class="help is-info mb-2">
             File must be <strong>less than <%= number_to_human_size(PinFlags::FeatureTags::ImportsController::MAX_FILE_SIZE) %></strong>.
           </p>
-          <div class="control" data-controller="pin-flags-file-size" data-pin-flags-file-size-max-value="<%= PinFlags::FeatureTags::ImportsController::MAX_FILE_SIZE %>">
+          <div class="control"
+               x-data="{
+                 fileName: 'No file selected',
+                 showError: false,
+                 maxSize: <%= PinFlags::FeatureTags::ImportsController::MAX_FILE_SIZE %>,
+                 validate(event) {
+                   const file = event.target.files[0];
+
+                   if (file) {
+                     this.fileName = file.name;
+
+                     if (file.size > this.maxSize) {
+                       this.showError = true;
+                       event.target.classList.add('is-danger');
+                       event.target.value = '';
+                       this.fileName = 'No file selected';
+                     } else {
+                       this.showError = false;
+                       event.target.classList.remove('is-danger');
+                     }
+                   } else {
+                     this.fileName = 'No file selected';
+                     this.showError = false;
+                     event.target.classList.remove('is-danger');
+                   }
+                 }
+               }">
             <div class="file has-name is-fullwidth is-boxed">
               <label class="file-label">
                 <%= form.file_field :json_file, class: "file-input",
                     required: true, accept: ".json",
-                    data: {
-                      pin_flags_file_size_target: 'input',
-                      action: 'change->pin-flags-file-size#validate',
-                    }
+                    "@change": "validate($event)"
                 %>
                 <span class="file-cta">
                   <span class="file-label">Choose a file…</span>
                 </span>
-                <span class="file-name" data-pin-flags-file-size-target="fileName">
-                  No file selected
-                </span>
+                <span class="file-name" x-text="fileName"></span>
               </label>
             </div>
-            <p class="help is-danger is-hidden" data-pin-flags-file-size-target="error">
+            <p class="help is-danger" x-show="showError">
               File size must be less than <%= number_to_human_size(PinFlags::FeatureTags::ImportsController::MAX_FILE_SIZE) %>.
             </p>
           </div>
