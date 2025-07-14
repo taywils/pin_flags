@@ -1,6 +1,21 @@
 <%# locals: (feature_tag:) %>
 
-<tr id="<%= display_feature_tag_table_turbo_frame_row_id(feature_tag) %>">
+<tr id="<%= display_feature_tag_table_turbo_frame_row_id(feature_tag) %>"
+    x-data="{ 
+      removing: false,
+      handleDelete() {
+        if (this.removing) return;
+        if (confirm('<%= j(display_feature_tag_row_delete_confirmation(feature_tag)) %>')) {
+          this.removing = true;
+          setTimeout(() => { 
+            this.$el.closest('form').requestSubmit();
+          }, 300);
+        }
+      }
+    }"
+    :class="{ 'pin-flags-fade-out': removing }"
+    :aria-hidden="removing"
+    class="pin-flags-fade-in">
   <td>
     <%= link_to feature_tag, data: { turbo_frame: "_top" } do %>
       <%= feature_tag.name.truncate(PinFlags::FeatureTag::MAX_NAME_LENGTH / 2) %>
@@ -22,11 +37,12 @@
     <% end %>
   </td>
   <td>
-    <%= link_to 'Delete', feature_tag, method: :delete,
+    <%= button_to 'Delete', feature_tag, method: :delete,
         data: {
           turbo_method: :delete,
-          turbo_confirm: display_feature_tag_row_delete_confirmation(feature_tag),
         },
-        class: 'button is-small is-danger is-outlined' %>
+        aria: { label: "Delete Feature Tag #{feature_tag.name}", describedby: "deletion-help" },
+        class: 'button is-small is-danger is-outlined',
+        "@click.prevent": "handleDelete()" %>
   </td>
 </tr>

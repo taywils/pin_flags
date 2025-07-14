@@ -13,3 +13,13 @@
  *= require_tree .
  *= require_self
  */
+
+.pin-flags-fade-in {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.pin-flags-fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
