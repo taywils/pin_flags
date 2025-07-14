@@ -11,6 +11,13 @@ module PinFlags
 
         "Are you sure you want to delete the feature subscription for '#{taggable_type}' with ID '#{taggable_id}'?"
       end
+
+      def display_feature_subscription_delete_button_aria_label(feature_subscription)
+        feature_taggable_type = feature_subscription.feature_taggable_type
+        feature_taggable_id = feature_subscription.feature_taggable_id
+
+        "Delete Feature Subscription for #{feature_taggable_type} with ID #{feature_taggable_id}"
+      end
     end
   end
 end
