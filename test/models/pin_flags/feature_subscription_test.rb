@@ -389,5 +389,33 @@ module PinFlags
 
       refute PinFlags::FeatureTag.enabled_for_subscriber?(@feature_tag.name, deleted_user)
     end
+
+    # Test FeatureTag.feature_taggable_models
+    test "feature_taggable_models includes TestUser" do
+      models = PinFlags::FeatureTag.feature_taggable_models
+
+      assert models.is_a?(Array)
+      assert_includes models, TestUser
+
+      # Verify all returned models include FeatureTaggable
+      models.each do |model|
+        assert model.included_modules.include?(PinFlags::FeatureTaggable), "#{model} should include FeatureTaggable"
+      end
+    end
+
+    test "feature_taggable_options_for_select includes TestUser name" do
+      options = PinFlags::FeatureTag.feature_taggable_options_for_select
+
+      assert options.is_a?(Array)
+      # Should be array of [name, name] pairs
+      assert_includes options, [ "PinFlags::FeatureSubscriptionTest::TestUser", "PinFlags::FeatureSubscriptionTest::TestUser" ]
+
+      # Verify format is correct
+      options.each do |option|
+        assert option.is_a?(Array)
+        assert_equal 2, option.length
+        assert_equal option[0], option[1]  # name and value should be the same
+      end
+    end
   end
 end
