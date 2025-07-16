@@ -261,7 +261,7 @@ module PinFlags
         feature_taggable_ids: user_ids
       )
 
-      assert_not result
+      refute result
       # Verify no subscriptions were created due to rollback
       assert_equal initial_count, PinFlags::FeatureSubscription.count
     end
@@ -282,7 +282,7 @@ module PinFlags
         feature_taggable_ids: user_ids
       )
 
-      assert_not result
+      refute result
       # Verify no subscriptions were created
       assert_equal initial_count, PinFlags::FeatureSubscription.count
     end
@@ -303,7 +303,7 @@ module PinFlags
         feature_taggable_ids: user_ids
       )
 
-      assert_not result
+      refute result
       # Verify no subscriptions were created
       assert_equal initial_count, PinFlags::FeatureSubscription.count
     end
@@ -344,6 +344,50 @@ module PinFlags
       refute result
       # Verify no subscriptions were created
       assert_equal initial_count, PinFlags::FeatureSubscription.count
+    end
+
+    # Tests for FeatureTag.enabled_for_subscriber?
+    test "enabled_for_subscriber? returns true when tag is enabled globally and user has it pinned" do
+      PinFlags::FeatureTag.enable(@feature_tag.name)
+      @user.feature_tag_pin(@feature_tag.name)
+
+      assert PinFlags::FeatureTag.enabled_for_subscriber?(@feature_tag.name, @user)
+    end
+
+    test "enabled_for_subscriber? returns false when tag is disabled globally even if user has it pinned" do
+      PinFlags::FeatureTag.disable(@feature_tag.name)
+      @user.feature_tag_pin(@feature_tag.name)
+
+      refute PinFlags::FeatureTag.enabled_for_subscriber?(@feature_tag.name, @user)
+    end
+
+    test "enabled_for_subscriber? returns false when tag is enabled globally but user doesn't have it pinned" do
+      PinFlags::FeatureTag.enable(@feature_tag.name)
+      # Don't pin the tag to the user
+
+      refute PinFlags::FeatureTag.enabled_for_subscriber?(@feature_tag.name, @user)
+    end
+
+    test "enabled_for_subscriber? handles normalized tag names" do
+      PinFlags::FeatureTag.enable(@feature_tag.name)
+      @user.feature_tag_pin("Live Feature")  # Non-normalized input
+
+      assert PinFlags::FeatureTag.enabled_for_subscriber?("Live Feature", @user)
+      assert PinFlags::FeatureTag.enabled_for_subscriber?("live_feature", @user)
+      assert PinFlags::FeatureTag.enabled_for_subscriber?("LIVE_FEATURE", @user)
+    end
+
+    test "enabled_for_subscriber? returns false for nonexistent tag" do
+      refute PinFlags::FeatureTag.enabled_for_subscriber?("nonexistent_feature", @user)
+    end
+
+    test "enabled_for_subscriber? returns false when tag exists but user doesn't exist" do
+      PinFlags::FeatureTag.enable(@feature_tag.name)
+      deleted_user = TestUser.create!(name: "Temp User", email: "temp@example.com")
+      deleted_user.feature_tag_pin(@feature_tag.name)
+      deleted_user.destroy
+
+      refute PinFlags::FeatureTag.enabled_for_subscriber?(@feature_tag.name, deleted_user)
     end
   end
 end
