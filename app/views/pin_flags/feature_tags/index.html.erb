@@ -49,6 +49,7 @@
       <div class="columns">
         <div class="column">
           <%= form.search_field :filter, 
+              autofocus: true,
               placeholder: "Filter by name...", 
               autocomplete: "off",
               value: @filter_param || "",
