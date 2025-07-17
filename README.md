@@ -1,4 +1,4 @@
-# PinFlags
+# ⛳ Pin Flags
 
 A lightweight Rails engine for managing entity based features with built-in caching support. "Pin features" to any ActiveRecord model with ease, providing a slightly different take on traditional feature flags.
 
@@ -6,13 +6,14 @@ A lightweight Rails engine for managing entity based features with built-in cach
 
 - 🚀 Polymorphic "feature tags" which can be tied to any ActiveRecord Model 
 - ⚡ Built-in caching with configurable expiry
-- 🎨 An admn UI that stays out of your way with minified BulmaCSS and AplineJS
+- 🎨 An admn UI that stays out of your way with minified [BulmaCSS](https://github.com/jgthms/bulma) and [AplineJS](https://github.com/alpinejs/alpine)
 - 🔒 Isolated namespace to avoid conflicts
 - 💉 No dependency on Stimulus 
 
 ## Dependencies
-- Rails 7.0 or higher with Turbo
-- Ruby 3.0 or higher
+- [Rails](https://github.com/rails/rails) 7.0 or higher with Turbo
+- [Ruby](https://www.ruby-lang.org/en/) 3.0 or higher
+- Rails app is using a relational database (e.g., PostgreSQL, MySQL, SQLite)
 
 ## Installation
 
@@ -161,20 +162,43 @@ end
 
 ## Development
 
-After checking out the repo, run:
+> Please prefer to test against an actual Rails application rather than using the built-in test/dummy app.
 
-```bash
-$ bundle install
-$ cd test/dummy
-$ rails server
+- `git clone` the PinFlags repository locally on your machine:
+
+- Add the gem to your Rails application's Gemfile:
+
+```ruby
+gem "pin_flags", path: "path/to/pin_flags"
+```
+- Mount the engine in your application's routes:
+
+```ruby
+# config/routes.rb
+Rails.application.routes.draw do
+  mount PinFlags::Engine, at: "/pin_flags"
+  # your other routes...
+end
 ```
 
-This will start the test application where you can interact with PinFlags.
+- Run the generator to install the engine:
+
+```bash
+$ rails g pin_flags:install
+``` 
+- Run the migrations to create the necessary database tables:
+
+```bash
+$ rails db:migrate
+``` 
+- Start your Rails server
 
 ### Running Tests
 
+- Navigate to the root of the PinFlags gem directory where you cloned the repository.
+
 ```bash
-$ bundle exec rake test
+$ rails test
 ```
 
 ## Contributing
@@ -210,7 +234,3 @@ If you encounter any issues or have questions:
    - Ruby version
    - Steps to reproduce
    - Expected vs actual behavior
-
-## Changelog
-
-See [CHANGELOG.md](CHANGELOG.md) for a detailed list of changes.
