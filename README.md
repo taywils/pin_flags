@@ -2,9 +2,8 @@
 
 A lightweight Rails engine for managing entity based features with built-in caching support. "Pin features" to any ActiveRecord model with ease, providing a slightly different take on traditional feature flags.
 
-<div style="display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap;">
-  <img src="docs/pin_flags_feature_tags_ui.png" alt="Feature Tags UI" style="width: 45%; min-width: 300px;">
-  <img src="docs/pin_flags_feature_subscriptions_ui.png" alt="Feature Subscriptions UI" style="width: 45%; min-width: 300px;">
+<div style="display: flex; justify-content: center;">
+  <img src="docs/pin_flags_feature_tags_ui.png" alt="Feature Tags UI" style="width: 70%; min-width: 300px;">
 </div>
 
 ## Features
@@ -14,6 +13,10 @@ A lightweight Rails engine for managing entity based features with built-in cach
 - 🎨 An admn UI that stays out of your way with minified [BulmaCSS](https://github.com/jgthms/bulma) and [AplineJS](https://github.com/alpinejs/alpine)
 - 🔒 Isolated namespace to avoid conflicts
 - 💉 No dependency on Stimulus 
+
+<div style="display: flex; justify-content: center;">
+  <img src="docs/pin_flags_feature_subscriptions_ui.png" alt="Feature Subscriptions UI" style="width: 70%; min-width: 300px;">
+</div>
 
 ## Dependencies
 - [Rails](https://github.com/rails/rails) 7.0 or higher with Turbo
