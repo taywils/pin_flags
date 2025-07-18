@@ -12,14 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Disable Bundler frozen mode
+        run: bundle config set frozen false
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ruby-3.4.4
           bundler-cache: true
-
-      - name: Disable Bundler frozen mode
-        run: bundle config set frozen false
 
       - name: Lint code for consistent style
         run: bundle exec rubocop -f github
@@ -31,14 +31,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Disable Bundler frozen mode
+        run: bundle config set frozen false
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ruby-3.4.4
           bundler-cache: true
-
-      - name: Disable Bundler frozen mode
-        run: bundle config set frozen false
 
       - name: Run tests
         env:
