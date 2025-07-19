@@ -7,10 +7,12 @@ gem "puma"
 
 gem "sqlite3"
 
-gem "propshaft"
+# This needs to match the version in pin_flags.gemspec
+gem "propshaft", "~> 1.0"
 
+# This needs to match the version in pin_flags.gemspec
 # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
-gem "rubocop-rails-omakase", require: false
+gem "rubocop-rails-omakase", "~> 1.0", require: false
 
 # Start debugger with binding.b [https://github.com/ruby/debug]
 # gem "debug", ">= 1.0.0"
