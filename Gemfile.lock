@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    pin_flags (0.1.0)
-      rails (>= 8.0.2)
-      turbo-rails
+    pin_flags (0.1.1)
+      rails (~> 8.0, >= 8.0.2)
+      turbo-rails (~> 2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -223,9 +223,9 @@ GEM
       rubocop-rails (>= 2.30)
     ruby-progressbar (1.13.0)
     securerandom (0.4.1)
-    sqlite3 (2.7.2-x86_64-linux-gnu)
+    sqlite3 (2.7.3-x86_64-linux-gnu)
     stringio (3.1.7)
-    thor (1.3.2)
+    thor (1.4.0)
     timeout (0.4.3)
     turbo-rails (2.0.16)
       actionpack (>= 7.1.0)
@@ -247,12 +247,12 @@ PLATFORMS
   x86_64-linux-gnu
 
 DEPENDENCIES
-  debug
+  debug (~> 1.9)
   pin_flags!
-  propshaft
+  propshaft (~> 1.0)
   puma
-  rubocop-performance
-  rubocop-rails-omakase
+  rubocop-performance (~> 1.21)
+  rubocop-rails-omakase (~> 1.0)
   sqlite3
 
 BUNDLED WITH
