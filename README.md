@@ -10,7 +10,7 @@ A lightweight Rails engine for managing entity based features with built-in cach
 
 - 🚀 Polymorphic "feature tags" which can be tied to any ActiveRecord Model 
 - ⚡ Built-in caching with configurable expiry
-- 🎨 An admn UI that stays out of your way with minified [BulmaCSS](https://github.com/jgthms/bulma) and [AplineJS](https://github.com/alpinejs/alpine)
+- 🎨 An admn UI that stays out of your way with minified [BulmaCSS](https://github.com/jgthms/bulma) and [AlpineJS](https://github.com/alpinejs/alpine)
 - 🔒 Isolated namespace to avoid conflicts
 - 💉 No dependency on Stimulus 
 
