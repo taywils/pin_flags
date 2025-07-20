@@ -54,6 +54,48 @@ PinFlags.config do |config|
 end
 ```
 
+### HTTP Basic Authentication
+
+PinFlags includes built-in HTTP Basic Authentication to protect the admin interface. Configure it in your initializer:
+
+```ruby
+PinFlags.config do |config|
+  config.cache_prefix = "budget_tracker_pin_flags"
+  config.cache_expiry = 1.hour
+  config.http_basic_auth_enabled = true    # Default: true
+  config.http_basic_auth_user = "admin"    # Default: "pin_flags_admin"  
+  config.http_basic_auth_password = "password"  # Default: "please_change_me"
+end
+```
+
+**Security Note:** Always change the default credentials in production environments.
+
+### Consider using environment variables for sensitive information:
+
+```ruby
+PinFlags.config do |config|
+  config.http_basic_auth_user = ENV["PIN_FLAGS_USER"] || "pin_flags_admin"
+  config.http_basic_auth_password = ENV["PIN_FLAGS_PASSWORD"] || "please_change_me"
+end
+```
+
+### Or use Rails credentials:
+
+```ruby
+PinFlags.config do |config|
+  config.http_basic_auth_user = Rails.application.credentials.pin_flags[:user] || "pin_flags_admin"
+  config.http_basic_auth_password = Rails.application.credentials.pin_flags[:password] || "please_change_me"
+end
+```
+
+To disable authentication entirely:
+
+```ruby
+PinFlags.config do |config|
+  config.http_basic_auth_enabled = false
+end
+```
+
 ## Usage
 
 ### Include the module in any of your ActiveRecord models:
@@ -167,6 +209,9 @@ end
 |--------|-------------|---------|
 | `cache_prefix` | Prefix for cache keys | `"pin_flags"` |
 | `cache_expiry` | Cache expiration time | `12.hours` |
+| `http_basic_auth_enabled` | Enable HTTP Basic Authentication | `true` |
+| `http_basic_auth_user` | Username for admin interface | `"pin_flags_admin"` |
+| `http_basic_auth_password` | Password for admin interface | `"secure_password"` |
 
 ## Development
 
