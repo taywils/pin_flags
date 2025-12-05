@@ -9,3 +9,17 @@
 /test/dummy/storage/
 /test/dummy/tmp/
 *.gem
+
+# Kiro IDE
+.kiro/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VSCode
+.vscode/
+*.code-workspace

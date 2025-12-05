@@ -19,7 +19,7 @@ A lightweight Rails engine for managing entity based features with built-in cach
 </div>
 
 ## Dependencies
-- [Rails](https://github.com/rails/rails) 7.0 or higher with Turbo
+- [Rails](https://github.com/rails/rails) 8.0 or higher with Turbo
 - [Ruby](https://www.ruby-lang.org/en/) 3.0 or higher
 - Rails app is using a relational database (e.g., PostgreSQL, MySQL, SQLite)
 
