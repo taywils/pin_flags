@@ -23,3 +23,6 @@ out/
 # VSCode
 .vscode/
 *.code-workspace
+
+# Mise
+mise.toml
