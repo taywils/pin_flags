@@ -1,5 +1,13 @@
 module PinFlags
   module FeatureTagsHelper
+    def pin_flags_logo(width: 260, height: 85)
+      file_path = PinFlags::Engine.root.join("docs", "pin_flags_logo.svg")
+      svg = File.read(file_path)
+      svg = svg.sub(/width="[^"]*"/, %(width="#{width}"))
+      svg = svg.sub(/height="[^"]*"/, %(height="#{height}"))
+      svg.html_safe
+    end
+
     def display_feature_tag_table_turbo_frame_row_id(feature_tag)
       "feature_tags_table_row_#{dom_id(feature_tag)}"
     end

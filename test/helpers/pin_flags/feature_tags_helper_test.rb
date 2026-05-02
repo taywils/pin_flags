@@ -47,4 +47,28 @@ class PinFlags::FeatureTagsHelperTest < ActionView::TestCase
     expected_message = "Are you sure you want to delete the feature tag '#{normalized_name}'?"
     assert_equal expected_message, result
   end
+
+  test "pin_flags_logo returns SVG content" do
+    result = pin_flags_logo
+    assert_includes result, "<svg"
+    assert_includes result, ">Pin</tspan>"
+    assert_includes result, ">Flags</tspan>"
+  end
+
+  test "pin_flags_logo returns html safe string" do
+    result = pin_flags_logo
+    assert_predicate result, :html_safe?
+  end
+
+  test "pin_flags_logo uses default dimensions" do
+    result = pin_flags_logo
+    assert_includes result, 'width="260"'
+    assert_includes result, 'height="85"'
+  end
+
+  test "pin_flags_logo accepts custom width and height" do
+    result = pin_flags_logo(width: 520, height: 170)
+    assert_includes result, 'width="520"'
+    assert_includes result, 'height="170"'
+  end
 end

@@ -1,10 +1,12 @@
-# ⛳ Pin Flags
+<div align="center">
+  <img src="docs/pin_flags_logo.svg" alt="Pin Flags" height="140">
 
-[![Gem Version](https://badge.fury.io/rb/pin_flags.svg)](https://badge.fury.io/rb/pin_flags)
-[![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop/rubocop)
-[![Gem Downloads](https://img.shields.io/gem/dt/pin_flags)](https://rubygems.org/gems/pin_flags)
+  <strong>"Pin features" to any ActiveRecord model with ease; entity scoped feature flags.</strong>
 
-> A lightweight Rails engine for managing entity based features with built-in caching support. "Pin features" to any ActiveRecord model with ease, providing a slightly different take on traditional feature flags.
+  [![Gem Version](https://badge.fury.io/rb/pin_flags.svg)](https://badge.fury.io/rb/pin_flags)
+  [![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop/rubocop)
+  [![Gem Downloads](https://img.shields.io/gem/dt/pin_flags)](https://rubygems.org/gems/pin_flags)
+</div>
 
 <div style="display: flex; justify-content: center;">
   <img src="docs/pin_flags_feature_tags_ui.png" alt="Feature Tags UI" style="width: 100%; min-width: 300px;">
