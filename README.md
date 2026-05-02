@@ -1,7 +1,7 @@
 <div align="center">
   <img src="docs/pin_flags_logo.svg" alt="Pin Flags" height="140">
 
-  <strong>"Pin features" to any ActiveRecord model with ease — a slightly different take on feature flags.</strong>
+  <strong>"Pin features" to any ActiveRecord model with ease; entity scoped feature flags.</strong>
 
   [![Gem Version](https://badge.fury.io/rb/pin_flags.svg)](https://badge.fury.io/rb/pin_flags)
   [![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop/rubocop)
