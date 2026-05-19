@@ -1,4 +1,4 @@
-class CreateFeatureSubscriptions < ActiveRecord::Migration[8.0]
+class CreatePinFlagsFeatureSubscriptions < ActiveRecord::Migration[8.0]
   def up
     create_table :pin_flags_feature_subscriptions do |t|
       t.references :feature_tag, null: false, foreign_key: { to_table: :pin_flags_feature_tags }
