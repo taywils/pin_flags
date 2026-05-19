@@ -6,8 +6,8 @@ module PinFlags
       source_root File.expand_path("../templates", __FILE__)
 
       def copy_migrations
-        migration_template "create_feature_tag.rb", "db/migrate/create_feature_tag.rb"
-        migration_template "create_feature_subscriptions.rb", "db/migrate/create_feature_subscriptions.rb"
+        migration_template "create_feature_tag.rb", "db/migrate/create_pin_flags_feature_tags.rb"
+        migration_template "create_feature_subscriptions.rb", "db/migrate/create_pin_flags_feature_subscriptions.rb"
       end
 
       def self.next_migration_number(dirname)

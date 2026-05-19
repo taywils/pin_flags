@@ -1,7 +1,7 @@
 module PinFlags
   module FeatureTagsHelper
     def pin_flags_logo(width: 260, height: 85)
-      file_path = PinFlags::Engine.root.join("docs", "pin_flags_logo.svg")
+      file_path = PinFlags::Engine.root.join("app", "assets", "images", "pin_flags", "pin_flags_logo.svg")
       svg = File.read(file_path)
       svg = svg.sub(/width="[^"]*"/, %(width="#{width}"))
       svg = svg.sub(/height="[^"]*"/, %(height="#{height}"))

@@ -1,4 +1,4 @@
-class CreateFeatureTag < ActiveRecord::Migration[8.0]
+class CreatePinFlagsFeatureTags < ActiveRecord::Migration[8.0]
   def up
     create_table :pin_flags_feature_tags do |t|
       t.string :name, null: false
