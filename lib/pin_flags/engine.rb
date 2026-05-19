@@ -3,11 +3,13 @@ module PinFlags
     isolate_namespace PinFlags
 
     initializer "pin_flags.assets.precompile" do |app|
-      app.config.assets.precompile += %w[
-        pin_flags/alpine.min.js
-        pin_flags/bulma.min.css
-        pin_flags/application.css
-      ]
+      if app.config.respond_to?(:assets) && app.config.assets.respond_to?(:precompile)
+        app.config.assets.precompile += %w[
+          pin_flags/alpine.min.js
+          pin_flags/bulma.min.css
+          pin_flags/application.css
+        ]
+      end
     end
   end
 end
